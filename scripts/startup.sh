@@ -40,8 +40,25 @@ docker_check() {
     fi
 }
 
+arch_check() {
+    if [[ ! -e /etc/arch-release ]]; then
+        echo -ne "ERROR! This script must be run in Arch Linux!\n"
+        exit 0
+    fi
+}
+
+pacman_check() {
+    if [[ -f /var/lib/pacman/db.lck ]]; then
+        echo "ERROR! Pacman is blocked."
+        echo -ne "If not running remove /var/lib/pacman/db.lck.\n"
+        exit 0
+    fi
+}
+
 background_checks() {
     root_check
+    arch_check
+    pacman_check
     docker_check
 }
 
