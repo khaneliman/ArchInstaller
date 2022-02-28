@@ -357,6 +357,7 @@ installtype () {
 # language (){}
 
 # Starting functions
+background_checks
 clear
 logo
 userinfo
