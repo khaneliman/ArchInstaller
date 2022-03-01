@@ -109,24 +109,25 @@ echo "  Bluetooth enabled"
 systemctl enable avahi-daemon.service
 echo "  Avahi enabled"
 
-if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
-echo -ne "
--------------------------------------------------------------------------
-                    Creating Snapper Config
--------------------------------------------------------------------------
-"
-
-SNAPPER_CONF="$HOME/ArchTitus/configs/etc/snapper/configs/root"
-mkdir -p /etc/snapper/configs/
-cp -rfv ${SNAPPER_CONF} /etc/snapper/configs/
-
-SNAPPER_CONF_D="$HOME/ArchTitus/configs/etc/conf.d/snapper"
-mkdir -p /etc/conf.d/
-cp -rfv ${SNAPPER_CONF_D} /etc/conf.d/
-
-fi
-
 if [[ ${INSTALL_TYPE} == "FULL" ]]; then
+
+  if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
+  echo -ne "
+  -------------------------------------------------------------------------
+                      Creating Snapper Config
+  -------------------------------------------------------------------------
+  "
+
+  SNAPPER_CONF="$HOME/ArchTitus/configs/etc/snapper/configs/root"
+  mkdir -p /etc/snapper/configs/
+  cp -rfv ${SNAPPER_CONF} /etc/snapper/configs/
+
+  SNAPPER_CONF_D="$HOME/ArchTitus/configs/etc/conf.d/snapper"
+  mkdir -p /etc/conf.d/
+  cp -rfv ${SNAPPER_CONF_D} /etc/conf.d/
+
+  fi
+
   echo -ne "
   -------------------------------------------------------------------------
                 Enabling (and Theming) Plymouth Boot Splash
@@ -145,6 +146,7 @@ if [[ ${INSTALL_TYPE} == "FULL" ]]; then
   fi
   plymouth-set-default-theme -R arch-glow # sets the theme and runs mkinitcpio
   echo 'Plymouth theme installed'
+  
 fi
 
 echo -ne "
