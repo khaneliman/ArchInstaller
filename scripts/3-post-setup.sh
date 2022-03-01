@@ -98,6 +98,10 @@ echo -ne "
 # services part of the base installation
 systemctl enable NetworkManager.service
 echo "  NetworkManager enabled"
+systemctl enable bluetooth
+echo "  Bluetooth enabled"
+systemctl enable fstrim.timer
+echo "  Periodic Trim enabled"
 
 if [[ ${INSTALL_TYPE} == "FULL" ]]; then
 
