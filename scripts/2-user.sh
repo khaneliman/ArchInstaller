@@ -53,7 +53,7 @@ if [[ ! $AUR_HELPER == none ]]; then
       continue
     fi
     echo "INSTALLING: ${line}"
-    $AUR_HELPER -S --noconfirm --needed ${line}
+    $AUR_HELPER -S --noconfirm --needed --color=always ${line}
   done
 fi
 
