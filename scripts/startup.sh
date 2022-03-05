@@ -285,24 +285,6 @@ echo -ne "Your key boards layout: ${keymap} \n"
 set_option KEYMAP $keymap
 }
 
-# @description Choose whether drive is SSD or not.
-drivessd () {
-echo -ne "
-Is this an ssd? yes/no:
-"
-
-options=("Yes" "No")
-select_option $? 1 "${options[@]}"
-
-case ${options[$?]} in
-    y|Y|yes|Yes|YES)
-    set_option MOUNT_OPTIONS "noatime,compress=zstd,ssd,commit=120";;
-    n|N|no|NO|No)
-    set_option MOUNT_OPTIONS "noatime,compress=zstd,commit=120";;
-    *) echo "Wrong option. Try again";drivessd;;
-esac
-}
-
 # @description Disk selection for drive to be used with installation.
 diskpart () {
 echo -ne "
@@ -316,15 +298,19 @@ echo -ne "
 
 PS3='
 Select the disk to install on: '
-options=($(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}'))
+options=("$(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}')")
 
 select_option $? 1 "${options[@]}"
 disk=${options[$?]%|*}
 
 echo -e "\n${disk%|*} selected \n"
-    set_option DISK ${disk%|*}
+    set_option DISK "${disk%|*}"
+if [[ "$(lsblk -n --output TYPE,ROTA | awk '$1=="disk"{print $2}')" -eq "0" ]]; then
+    set_option "MOUNT_OPTION" "noatime,compress=zstd,ssd,commit=120"
+else
+    set_option "MOUNT_OPTION" "noatime,compress=zstd,commit=120"
+fi
 
-drivessd
 }
 
 # @description Gather username and password to be used for installation. 
