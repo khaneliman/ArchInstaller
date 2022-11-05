@@ -8,40 +8,27 @@
 # Find the name of the folder the scripts are in
 set -a
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-SCRIPTS_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"/scripts
-CONFIGS_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"/configs
+SCRIPTS_DIR="$SCRIPT_DIR"/scripts
+CONFIGS_DIR="$SCRIPT_DIR"/configs
 set +a
 
-CONFIG_FILE="$SCRIPT_DIR"/configs/setup.conf
-LOG_FILE="$SCRIPT_DIR"/configs/main.log
+CONFIG_FILE="$CONFIGS_DIR"/setup.conf
+LOG_FILE="$CONFIGS_DIR"/main.log
 
 [[ -f "$LOG_FILE" ]] && rm -f "$LOG_FILE"
 
-source_file() {
-    if [[ -f "$1" ]]; then
-        source "$1"
-    else
-        echo "ERROR! Missing file: $1"
-        exit 0
-    fi
-}
-
-end() {
-    echo "Copying logs"
-    if [[ "$(find /mnt/var/log -type d | wc -l)" -ne 0 ]]; then
-        cp -v "$LOG_FILE" /mnt/var/log/ArchTitus.log
-    else
-        echo -ne "ERROR! Log directory not found"
-        exit 0
-    fi
-}
+# source utility scripts
+for filename in "$SCRIPTS"/utils/*.sh; do
+    [ -e "$filename" ] || continue
+    source "$filename"
+done
 
 clear
 logo
 echo -ne "
                 Scripts are in directory named ArchTitus
 "
-. "$SCRIPT_DIR"/scripts/startup.sh
+. "$SCRIPTS_DIR"/startup.sh
 source_file "$CONFIG_FILE"
 sequence |& tee "$LOG_FILE"
 logo

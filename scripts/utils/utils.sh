@@ -159,3 +159,22 @@ select_option() {
 
     return $(($active_col + $active_row * $colmax))
 }
+
+source_file() {
+    if [[ -f "$1" ]]; then
+        source "$1"
+    else
+        echo "ERROR! Missing file: $1"
+        exit 0
+    fi
+}
+
+end() {
+    echo "Copying logs"
+    if [[ "$(find /mnt/var/log -type d | wc -l)" -ne 0 ]]; then
+        cp -v "$LOG_FILE" /mnt/var/log/ArchTitus.log
+    else
+        echo -ne "ERROR! Log directory not found"
+        exit 0
+    fi
+}
