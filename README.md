@@ -1,7 +1,5 @@
-# ArchTitus Installer Script
-[![GitHub Super-Linter](https://github.com/ChrisTitusTech/ArchTitus/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
-
-<img src="https://i.imgur.com/YiNMnan.png" />
+# Arch Installer Script
+[![GitHub Super-Linter](https://github.com/khaneliman/ArchTitus/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 This README contains the steps I do to install and configure a fully-functional Arch Linux installation containing a desktop environment, all the support packages (network, bluetooth, audio, printers, etc.), along with all my preferred applications and utilities. The shell scripts in this repo allow the entire process to be automated.)
 
@@ -10,15 +8,13 @@ This README contains the steps I do to install and configure a fully-functional 
 
 Download ArchISO from <https://archlinux.org/download/> and put on a USB drive with [Etcher](https://www.balena.io/etcher/), [Ventoy](https://www.ventoy.net/en/index.html), or [Rufus](https://rufus.ie/en/)
 
-If you don't want to build using this script I did create an image @ <https://www.christitus.com/arch-titus>
-
 ## Boot Arch ISO
 
 From initial Prompt type the following commands:
 
 ```
 pacman -Sy git
-git clone https://github.com/ChrisTitusTech/ArchTitus
+git clone https://github.com/khaneliman/ArchTitus
 cd ArchTitus
 ./archtitus.sh
 ```
