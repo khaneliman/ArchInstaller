@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+#github-action genshdoc
+#
+# @file System Checks
+# @brief Contains the functions used to perform various checks to safely run program
+# @stdout Output routed to install.log
+# @stderror Output routed to install.log
+
 arch_check() {
     if [[ ! -e /etc/arch-release ]]; then
         echo -ne "ERROR! This script must be run in Arch Linux!\n"

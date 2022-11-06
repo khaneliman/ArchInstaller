@@ -3,6 +3,8 @@
 #
 # @file install.sh
 # @brief Entrance script that launches children scripts for each phase of installation.
+# @stdout Output routed to install.log
+# @stderror Output routed to install.log
 # shellcheck disable=SC1090,SC1091
 
 # Find the name of the folder the scripts are in
@@ -28,10 +30,7 @@ done
 # Actual install sequence
 clear
 logo
-echo -ne "
-                Scripts are in directory named $SCRIPT_DIR
-"
-. "$SCRIPTS_DIR"/startup.sh
+. "$SCRIPTS_DIR"/configuration.sh
 source_file "$CONFIG_FILE"
 sequence
 logo

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #github-action genshdoc
 #
-# @file Startup
+# @file Configuration
 # @brief This script will ask users about their prefrences like disk, file system, timezone, keyboard layout, user name, password, etc.
-# @stdout Output routed to startup.log
-# @stderror Output routed to startup.log
+# @stdout Output routed to install.log
+# @stderror Output routed to install.log
 
 # @setting-header General Settings
 # @setting CONFIG_FILE string[$CONFIGS_DIR/setup.conf] Location of setup.conf to be used by set_option and all subsequent scripts.
@@ -13,27 +13,21 @@ if [ ! -f $CONFIG_FILE ]; then # check if file exists
     touch -f $CONFIG_FILE      # create file if not exists
 fi
 
-# More features in future
-# language (){}
-
 # Starting functions
 background_checks
 clear
 logo
-userinfo
+user_info
 clear
 logo
-desktopenv
-# Set fixed options that installation uses if user choses server installation
-set_option INSTALL_TYPE MINIMAL
-set_option AUR_HELPER NONE
-if [[ ! $desktop_env == server ]]; then
+install_type
+if [[ ! $INSTALL_TYPE == SERVER ]]; then
     clear
     logo
-    aurhelper
+    aur_helper
     clear
     logo
-    installtype
+    desktop_environment
 fi
 clear
 logo
@@ -47,3 +41,5 @@ timezone
 clear
 logo
 keymap
+
+cat $CONFIG_FILE

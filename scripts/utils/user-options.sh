@@ -1,5 +1,13 @@
+#!/usr/bin/env bash
+#github-action genshdoc
+#
+# @file User Options
+# @brief User configuration functions to set variables to be used during installation
+# @stdout Output routed to install.log
+# @stderror Output routed to install.log
+
 # @description Choose AUR helper.
-aurhelper() {
+aur_helper() {
     # Let the user choose AUR helper from predefined list
     echo -ne "Please enter your desired AUR helper:\n"
     options=(paru yay picaur aura trizen pacaur none)
@@ -9,7 +17,7 @@ aurhelper() {
 }
 
 # @description Choose Desktop Environment
-desktopenv() {
+desktop_environment() {
     # Let the user choose Desktop Enviroment from predefined list
     echo -ne "Please select your desired Desktop Enviroment:\n"
     options=($(for f in pkg-files/*.txt; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done))
@@ -46,11 +54,12 @@ Please Select your file system for both boot and root
 }
 
 # @description Choose whether to do full or minimal installation.
-installtype() {
+install_type() {
     echo -ne "Please select type of installation:\n\n
   Full install: Installs full featured desktop enviroment, with added apps and themes needed for everyday use\n
-  Minimal Install: Installs only apps few selected apps to get you started\n"
-    options=(FULL MINIMAL)
+  Minimal Install: Installs only apps few selected apps to get you started\n
+  Server Install: Installs only base system without a desktop environment\n"
+    options=(FULL MINIMAL SERVER)
     select_option $? 4 "${options[@]}"
     install_type=${options[$?]}
     set_option INSTALL_TYPE $install_type
@@ -136,10 +145,34 @@ System detected your timezone to be '$time_zone' \n"
 }
 
 # @description Gather username and password to be used for installation.
-userinfo() {
-    read -p "Please enter your username: " username
+user_info() {
+
+    # Loop through user input until the user gives a valid username
+    while true; do
+        read -p "Please enter username:" username
+        # username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
+        # lowercase the username to test regex
+        if [[ "${username,,}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]]; then
+            break
+        fi
+        echo "Incorrect username."
+    done
     set_option USERNAME ${username,,} # convert to lower case as in issue #109
+
     set_password "PASSWORD"
-    read -rep "Please enter your hostname: " nameofmachine
+
+    # Loop through user input until the user gives a valid hostname, but allow the user to force save
+    while true; do
+        read -p "Please name your machine:" nameofmachine
+        # hostname regex (!!couldn't find spec for computer name!!)
+        if [[ "${nameofmachine,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]; then
+            break
+        fi
+        # if validation fails allow the user to force saving of the hostname
+        read -p "Hostname doesn't seem correct. Do you still want to save it? (y/n)" force
+        if [[ "${force,,}" = "y" ]]; then
+            break
+        fi
+    done
     set_option NAME_OF_MACHINE $nameofmachine
 }

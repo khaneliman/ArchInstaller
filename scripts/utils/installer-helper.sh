@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+#github-action genshdoc
+#
+# @file Installer Helper
+# @brief Contains the functions used to facilitate the installer
+# @stdout Output routed to install.log
+# @stderror Output routed to install.log
+
 # @description Displays ArchInstaller logo
 # @noargs
 logo() {
@@ -21,7 +29,7 @@ logo() {
 sequence() {
     . "$SCRIPTS_DIR"/0-preinstall.sh
     arch-chroot /mnt "$HOME"/ArchInstaller/scripts/1-setup.sh
-    if [[ ! "$DESKTOP_ENV" == server ]]; then
+    if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
         arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- /home/"$USERNAME"/ArchInstaller/scripts/2-user.sh
     fi
     arch-chroot /mnt "$HOME"/ArchInstaller/scripts/3-post-setup.sh
