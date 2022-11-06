@@ -62,7 +62,7 @@ create_filesystems() {
 "
     set -e
 
-    if [[ "${DISK}" =~ "nvme" ]]; then
+    if [[ "${DISK}" =~ "nvme" || "${DISK}" =~ "mmc" ]]; then
         partition2="${DISK}"p2
         partition3="${DISK}"p3
     else
