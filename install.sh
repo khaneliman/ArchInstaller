@@ -1,7 +1,7 @@
 #!/bin/bash
 #github-action genshdoc
 #
-# @file ArchTitus
+# @file install.sh
 # @brief Entrance script that launches children scripts for each phase of installation.
 # shellcheck disable=SC1090,SC1091
 
@@ -13,24 +13,27 @@ CONFIGS_DIR="$SCRIPT_DIR"/configs
 set +a
 
 CONFIG_FILE="$CONFIGS_DIR"/setup.conf
-LOG_FILE="$CONFIGS_DIR"/main.log
+LOG_FILE="$SCRIPT_DIR"/install.log
 
+# Delete existing log file and log output of script
 [[ -f "$LOG_FILE" ]] && rm -f "$LOG_FILE"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # source utility scripts
-for filename in "$SCRIPTS"/utils/*.sh; do
+for filename in "$SCRIPTS_DIR"/utils/*.sh; do
     [ -e "$filename" ] || continue
     source "$filename"
 done
 
+# Actual install sequence
 clear
 logo
 echo -ne "
-                Scripts are in directory named ArchTitus
+                Scripts are in directory named $SCRIPT_DIR
 "
 . "$SCRIPTS_DIR"/startup.sh
 source_file "$CONFIG_FILE"
-sequence |& tee "$LOG_FILE"
+sequence
 logo
 echo -ne "
                 Done - Please Eject Install Media and Reboot

@@ -1,6 +1,6 @@
 # Arch Installer Script
 
-[![GitHub Super-Linter](https://github.com/khaneliman/ArchTitus/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/khaneliman/ArchInstaller/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 This README contains the steps I do to install and configure a fully-functional Arch Linux installation containing a desktop environment, all the support packages (network, bluetooth, audio, printers, etc.), along with all my preferred applications and utilities. The shell scripts in this repo allow the entire process to be automated.)
 
@@ -16,9 +16,9 @@ From initial Prompt type the following commands:
 
 ```
 pacman -Sy git
-git clone https://github.com/khaneliman/ArchTitus
-cd ArchTitus
-./archtitus.sh
+git clone https://github.com/khaneliman/ArchInstaller
+cd ArchInstaller
+./install.sh
 ```
 
 ### System Description

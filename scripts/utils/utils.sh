@@ -1,29 +1,30 @@
-# @description Displays ArchTitus logo
+# @description Displays ArchInstaller logo
 # @noargs
 logo() {
     # This will be shown on every set as user is progressing
     echo -ne "
--------------------------------------------------------------------------
- █████╗ ██████╗  ██████╗██╗  ██╗████████╗██╗████████╗██╗   ██╗███████╗
-██╔══██╗██╔══██╗██╔════╝██║  ██║╚══██╔══╝██║╚══██╔══╝██║   ██║██╔════╝
-███████║██████╔╝██║     ███████║   ██║   ██║   ██║   ██║   ██║███████╗
-██╔══██║██╔══██╗██║     ██╔══██║   ██║   ██║   ██║   ██║   ██║╚════██║
-██║  ██║██║  ██║╚██████╗██║  ██║   ██║   ██║   ██║   ╚██████╔╝███████║
-╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝   ╚═╝    ╚═════╝ ╚══════╝
-------------------------------------------------------------------------
-                    Automated Arch Linux Installer
-                        SCRIPTHOME: ArchTitus
--------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+ █████╗ ██████╗  ██████╗██╗  ██╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗ 
+██╔══██╗██╔══██╗██╔════╝██║  ██║    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
+███████║██████╔╝██║     ███████║    ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
+██╔══██║██╔══██╗██║     ██╔══██║    ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
+██║  ██║██║  ██║╚██████╗██║  ██║    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+                                                                                                          
+--------------------------------------------------------------------------------------------------------------
+                                    Automated Arch Linux Installer
+                                        SCRIPTHOME: $SCRIPT_DIR
+                        --------------------------------------------------
 "
 }
 
 sequence() {
-    . "$SCRIPT_DIR"/scripts/0-preinstall.sh
-    arch-chroot /mnt "$HOME"/ArchTitus/scripts/1-setup.sh
+    . "$SCRIPTS_DIR"/0-preinstall.sh
+    arch-chroot /mnt "$HOME"/ArchInstaller/scripts/1-setup.sh
     if [[ ! "$DESKTOP_ENV" == server ]]; then
-        arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- /home/"$USERNAME"/ArchTitus/scripts/2-user.sh
+        arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- /home/"$USERNAME"/ArchInstaller/scripts/2-user.sh
     fi
-    arch-chroot /mnt "$HOME"/ArchTitus/scripts/3-post-setup.sh
+    arch-chroot /mnt "$HOME"/ArchInstaller/scripts/3-post-setup.sh
 }
 
 # @description set options in setup.conf
@@ -172,7 +173,7 @@ source_file() {
 end() {
     echo "Copying logs"
     if [[ "$(find /mnt/var/log -type d | wc -l)" -ne 0 ]]; then
-        cp -v "$LOG_FILE" /mnt/var/log/ArchTitus.log
+        cp -v "$LOG_FILE" /mnt/var/log/install.log
     else
         echo -ne "ERROR! Log directory not found"
         exit 0
