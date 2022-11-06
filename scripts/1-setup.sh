@@ -6,6 +6,14 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# source utility scripts
+for filename in /root/archinstaller/scripts/utils/*.sh; do
+    [ -e "$filename" ] || continue
+    # shellcheck source=./utils/*.sh
+    source "$filename"
+done
+source $HOME/archinstaller/configs/setup.conf
+
 logo
 
 network_install

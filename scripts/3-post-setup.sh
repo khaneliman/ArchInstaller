@@ -6,6 +6,14 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# source utility scripts
+for filename in "$HOME"/archinstaller/scripts/utils/*.sh; do
+  [ -e "$filename" ] || continue
+  # shellcheck source=./utils/*.sh
+  source "$filename"
+done
+source $HOME/archinstaller/configs/setup.conf
+
 logo
 
 echo -ne "
@@ -76,4 +84,4 @@ rm -r "$HOME"/archinstaller
 rm -r /home/"$USERNAME"/archinstaller
 
 # Replace in the same state
-cd "$pwd" || return
+clear

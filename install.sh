@@ -24,6 +24,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # source utility scripts
 for filename in "$SCRIPTS_DIR"/utils/*.sh; do
     [ -e "$filename" ] || continue
+    # shellcheck source=s./utils/*.sh
     source "$filename"
 done
 

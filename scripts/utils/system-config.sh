@@ -161,6 +161,8 @@ do_btrfs() {
     for z in "${SUBVOLUMES[@]:1}"; do
         w="${z[*]//@/}"
         mkdir -p /mnt/"${w}"
+
+        echo -e "\n Mounting $z at /$MOUNTPOINT/$w"
         mount -o "$MOUNT_OPTIONS",subvol="${z}" "$2" "$MOUNTPOINT"/"${w}"
     done
 }
