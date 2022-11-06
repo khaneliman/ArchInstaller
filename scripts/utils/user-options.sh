@@ -7,6 +7,7 @@
 # @stderror Output routed to install.log
 
 # @description Choose AUR helper.
+# @noargs
 aur_helper() {
     # Let the user choose AUR helper from predefined list
     echo -ne "Please enter your desired AUR helper:\n"
@@ -17,6 +18,7 @@ aur_helper() {
 }
 
 # @description Choose Desktop Environment
+# @noargs
 desktop_environment() {
     # Let the user choose Desktop Enviroment from predefined list
     echo -ne "Please select your desired Desktop Enviroment:\n"
@@ -28,6 +30,7 @@ desktop_environment() {
 
 # @description This function will handle file systems. At this movement we are handling only
 # btrfs and ext4. Others will be added in future.
+# @noargs
 filesystem() {
     echo -ne "
 Please Select your file system for both boot and root
@@ -54,6 +57,7 @@ Please Select your file system for both boot and root
 }
 
 # @description Choose whether to do full or minimal installation.
+# @noargs
 install_type() {
     echo -ne "Please select type of installation:\n\n
   Full install: Installs full featured desktop enviroment, with added apps and themes needed for everyday use\n
@@ -66,6 +70,7 @@ install_type() {
 }
 
 # @description Set user's keyboard mapping.
+# @noargs
 keymap() {
     echo -ne "
 Please select key board layout from this list"
@@ -79,6 +84,8 @@ Please select key board layout from this list"
     set_option KEYMAP $keymap
 }
 
+# @description Set btrfs subvolumes to be used during install
+# @noargs
 set_btrfs() {
     echo "Please enter your btrfs subvolumes separated by space"
     echo "usualy they start with @."
@@ -102,6 +109,8 @@ set_btrfs() {
     fi
 }
 
+# @description Read and verify user password before setting
+# @noargs
 set_password() {
     read -rs -p "Please enter password: " PASSWORD1
     echo -ne "\n"
@@ -116,6 +125,7 @@ set_password() {
 }
 
 # @description Detects and sets timezone.
+# @noargs
 timezone() {
     # Added this from arch wiki https://wiki.archlinux.org/title/System_time
     time_zone="$(curl --fail https://ipapi.co/timezone)"
@@ -145,6 +155,7 @@ System detected your timezone to be '$time_zone' \n"
 }
 
 # @description Gather username and password to be used for installation.
+# @noargs
 user_info() {
 
     # Loop through user input until the user gives a valid username

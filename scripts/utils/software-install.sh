@@ -6,6 +6,8 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Installs software from the AUR
+# @noargs
 aur_helper_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -30,6 +32,8 @@ aur_helper_install() {
     fi
 }
 
+# @description Installs base arch linux system
+# @noargs
 base_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -50,6 +54,8 @@ base_install() {
     fi
 }
 
+# @description Installs desktop environment packages from base repositories
+# @noargs
 desktop_environment_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -66,6 +72,8 @@ desktop_environment_install() {
     done
 }
 
+# @description Installs graphics drivers depending on detected gpu
+# @noargs
 graphics_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -86,6 +94,8 @@ graphics_install() {
     fi
 }
 
+# @description Installs cpu microcode depending on detected cpu
+# @noargs
 microcode_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -105,6 +115,8 @@ microcode_install() {
     fi
 }
 
+# @description Installs network management software
+# @noargs
 network_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -115,6 +127,8 @@ network_install() {
     systemctl enable --now NetworkManager
 }
 
+# @description Perform desktop environment specific theming
+# @noargs
 user_theming() {
     echo -ne "
 -------------------------------------------------------------------------

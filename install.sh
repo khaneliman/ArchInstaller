@@ -24,7 +24,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # source utility scripts
 for filename in "$SCRIPTS_DIR"/utils/*.sh; do
     [ -e "$filename" ] || continue
-    source "$filename"
+    source_file "$filename"
 done
 
 # Actual install sequence

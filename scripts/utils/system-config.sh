@@ -6,6 +6,8 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Adds user that was setup prior to installation
+# @noargs
 add_user() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -32,6 +34,8 @@ add_user() {
     fi
 }
 
+# @description Configures makepkg settings dependent on cpu cores
+# @noargs
 cpu_config() {
     nc=$(grep -c ^processor /proc/cpuinfo)
     echo -ne "
@@ -48,6 +52,8 @@ cpu_config() {
     fi
 }
 
+# @description Create the filesystem on the drive selected for installation
+# @noargs
 create_filesystems() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -83,6 +89,7 @@ create_filesystems() {
 }
 
 # @description Disk selection for drive to be used with installation.
+# @noargs
 diskpart() {
     echo -ne "
 ------------------------------------------------------------------------
@@ -110,6 +117,8 @@ Select the disk to install on: '
 
 }
 
+# @description Install and enable display manager depending on desktop environment chosen
+# @noargs
 display_manager() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -148,7 +157,21 @@ display_manager() {
     fi
 }
 
+# @description Perform the btrfs filesystem configuration
+# @noargs
 do_btrfs() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Installing Prerequisites
+-------------------------------------------------------------------------
+"
+    pacman -S --noconfirm --needed --color=always btrfs-progs
+
+    echo -ne "
+-------------------------------------------------------------------------
+                    Creating btrfs device
+-------------------------------------------------------------------------
+"
     mkfs.btrfs -L "$1" "$2" -f
     mount -t btrfs "$2" "$MOUNTPOINT"
 
@@ -167,13 +190,15 @@ do_btrfs() {
     done
 }
 
+# @description Format disk before creatign filesystem
+# @noargs
 format_disk() {
     echo -ne "
 -------------------------------------------------------------------------
                     Installing Prerequisites
 -------------------------------------------------------------------------
 "
-    pacman -S --noconfirm --needed --color=always gptfdisk btrfs-progs glibc
+    pacman -S --noconfirm --needed --color=always gptfdisk glibc
     echo -ne "
 -------------------------------------------------------------------------
                     Formatting Disk
@@ -196,6 +221,8 @@ format_disk() {
     partprobe ${DISK} # reread partition table to ensure it is correct
 }
 
+# @description Theme grub
+# @noargs
 grub_config() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -227,6 +254,8 @@ grub_config() {
     echo -e "All set!"
 }
 
+# @description Set locale, timezone, and keymap
+# @noargs
 locale_config() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -243,6 +272,8 @@ locale_config() {
     localectl --no-ask-password set-keymap ${KEYMAP}
 }
 
+# @description Confgiure swap on low memory systems
+# @noargs
 low_memory_config() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -264,6 +295,8 @@ low_memory_config() {
     fi
 }
 
+# @description Update mirrorlist to improve download speeds
+# @noargs
 mirrorlist_update() {
     pacman -S --noconfirm --needed --color=always reflector
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
@@ -275,6 +308,8 @@ mirrorlist_update() {
     reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 }
 
+# @description Install plymouth splash
+# @noargs
 plymouth_config() {
     echo -ne "
   -------------------------------------------------------------------------
@@ -296,6 +331,8 @@ plymouth_config() {
     echo 'Plymouth theme installed'
 }
 
+# @description Configure snapper default setup
+# @noargs
 snapper_config() {
     echo -ne "
   -------------------------------------------------------------------------

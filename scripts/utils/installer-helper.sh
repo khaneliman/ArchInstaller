@@ -6,6 +6,30 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Copy logs to installed system and exit script
+# @noargs
+end() {
+    echo "Copying logs"
+    if [[ "$(find /mnt/var/log -type d | wc -l)" -ne 0 ]]; then
+        cp -v "$LOG_FILE" /mnt/var/log/install.log
+    else
+        echo -ne "ERROR! Log directory not found"
+        exit 0
+    fi
+}
+
+# @description Exits script if previous command fails
+# @arg $1 string Exit code of previous command
+# @arg $2 string Previous command
+exit_on_error() {
+    exit_code=$1
+    last_command=${@:2}
+    if [ $exit_code -ne 0 ]; then
+        echo >&2 "\"${last_command}\" command failed with exit code ${exit_code}."
+        exit $exit_code
+    fi
+}
+
 # @description Displays ArchInstaller logo
 # @noargs
 logo() {
@@ -26,6 +50,8 @@ logo() {
 "
 }
 
+# @description Sequence to call scripts
+# @noargs
 sequence() {
     . "$SCRIPTS_DIR"/0-preinstall.sh
     arch-chroot /mnt "$HOME"/ArchInstaller/scripts/1-setup.sh
@@ -169,21 +195,13 @@ select_option() {
     return $(($active_col + $active_row * $colmax))
 }
 
+# @description Sources file to be used by the script
+# @arg $1 File to source
 source_file() {
     if [[ -f "$1" ]]; then
         source "$1"
     else
         echo "ERROR! Missing file: $1"
-        exit 0
-    fi
-}
-
-end() {
-    echo "Copying logs"
-    if [[ "$(find /mnt/var/log -type d | wc -l)" -ne 0 ]]; then
-        cp -v "$LOG_FILE" /mnt/var/log/install.log
-    else
-        echo -ne "ERROR! Log directory not found"
         exit 0
     fi
 }
