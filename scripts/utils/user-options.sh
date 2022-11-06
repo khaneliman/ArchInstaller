@@ -33,7 +33,7 @@ desktop_environment() {
 disk_select() {
     echo -ne "
 ------------------------------------------------------------------------
-    THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK
+    ${BRED}${BOLD}THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK!${RESET}
     Please make sure you know what you are doing because
     after formatting your disk there is no way to get data back
 ------------------------------------------------------------------------
@@ -102,14 +102,14 @@ install_type() {
 # @noargs
 keymap() {
     echo -ne "
-Please select key board layout from this list"
+Please select keyboard layout from this list"
     # These are default key maps as presented in official arch repo archinstall
     options=(us by ca cf cz de dk es et fa fi fr gr hu il it lt lv mk nl no pl ro ru sg ua uk)
 
     select_option $? 4 "${options[@]}"
     keymap="${options[$?]}"
 
-    echo -ne "Your key boards layout: ${keymap} \n"
+    echo -ne "Your keyboards layout: ${keymap} \n"
     set_option KEYMAP "$keymap"
 }
 
@@ -194,9 +194,7 @@ user_info() {
         read -p "Please enter username:" username
         # username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
         # lowercase the username to test regex
-        if [[ "${username,,}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]]; then
-            break
-        fi
+        [[ "${username,,}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] && break
         echo "Incorrect username."
     done
     set_option USERNAME "${username,,}" # convert to lower case as in issue #109
@@ -207,14 +205,10 @@ user_info() {
     while true; do
         read -p "Please name your machine:" nameofmachine
         # hostname regex (!!couldn't find spec for computer name!!)
-        if [[ "${nameofmachine,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]; then
-            break
-        fi
+        [[ "${nameofmachine,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]] && break
         # if validation fails allow the user to force saving of the hostname
         read -p "Hostname doesn't seem correct. Do you still want to save it? (y/n)" force
-        if [[ "${force,,}" = "y" ]]; then
-            break
-        fi
+        [[ "${force,,}" = "y" ]] && break
     done
     set_option NAME_OF_MACHINE "$nameofmachine"
 }

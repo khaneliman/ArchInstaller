@@ -9,12 +9,20 @@
 
 # Find the name of the folder the scripts are in
 set -a # mark variables to be exported to subsequent commands
+
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 SCRIPTS_DIR="$SCRIPT_DIR"/scripts
 CONFIGS_DIR="$SCRIPT_DIR"/configs
 
 CONFIG_FILE="$CONFIGS_DIR"/setup.conf
 LOG_FILE="$SCRIPT_DIR"/install.log
+
+# Colors/formatting for echo
+BOLD='\e[1m'
+RESET='\e[0m' # Reset text to default appearance
+#   High intensity colors:
+BRED='\e[91m'
+
 set +a
 
 # Delete existing log file and log output of script
