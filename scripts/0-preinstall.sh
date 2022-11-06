@@ -39,10 +39,17 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
-echo "keyserver hkp://keyserver.ubuntu.com" >>/mnt/etc/pacman.d/gnupg/gpg.conf
-cp -R ${SCRIPT_DIR} /mnt/root/ArchInstaller
-cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
+echo -e "\n Adding keyserver to gpg.conf"
+echo "keyserver hkp://keyserver.ubuntu.com" >>/mnt/etc/pacman.d/gnupg/gpg.conf
+
+echo -e "\n Copying $SCRIPT_DIR to /mnt/root/archinstaller"
+cp -R "${SCRIPT_DIR}" /mnt/root/archinstaller
+
+echo -e "\n Copying mirrorlist to /mnt/etc/pacman.d/mirrorlist"
+cp "/etc/pacman.d/mirrorlist" "/mnt/etc/pacman.d/mirrorlist"
+
+echo -e "\n Generating fstab"
 genfstab -L /mnt >>/mnt/etc/fstab
 echo " 
   Generated /etc/fstab:
@@ -54,7 +61,7 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 if [[ ! -d "/sys/firmware/efi" ]]; then
-    grub-install --boot-directory=/mnt/boot ${DISK}
+    grub-install --boot-directory=/mnt/boot "${DISK}"
 else
     pacstrap /mnt efibootmgr --noconfirm --needed --color=always
 fi

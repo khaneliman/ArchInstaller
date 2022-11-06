@@ -24,13 +24,13 @@ end() {
 exit_on_error() {
     exit_code=$1
     last_command=${@:2}
-    if [ $exit_code -ne 0 ]; then
+    if [ "$exit_code" -ne 0 ]; then
         echo >&2 "\"${last_command}\" command failed with exit code ${exit_code}."
-        exit $exit_code
+        exit "$exit_code"
     fi
 }
 
-# @description Displays ArchInstaller logo
+# @description Displays archinstaller logo
 # @noargs
 logo() {
     # This will be shown on every set as user is progressing
@@ -54,11 +54,11 @@ logo() {
 # @noargs
 sequence() {
     . "$SCRIPTS_DIR"/0-preinstall.sh
-    arch-chroot /mnt "$HOME"/ArchInstaller/scripts/1-setup.sh
+    arch-chroot /mnt "$HOME"/archinstaller/scripts/1-setup.sh
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- /home/"$USERNAME"/ArchInstaller/scripts/2-user.sh
+        arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- /home/"$USERNAME"/archinstaller/scripts/2-user.sh
     fi
-    arch-chroot /mnt "$HOME"/ArchInstaller/scripts/3-post-setup.sh
+    arch-chroot /mnt "$HOME"/archinstaller/scripts/3-post-setup.sh
 }
 
 # @description set options in setup.conf

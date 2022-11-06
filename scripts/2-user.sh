@@ -6,8 +6,6 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
-source $HOME/ArchInstaller/configs/setup.conf
-
 logo
 
 desktop_environment_install

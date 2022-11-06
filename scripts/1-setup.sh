@@ -7,7 +7,6 @@
 # @stderror Output routed to install.log
 
 logo
-source $HOME/ArchInstaller/configs/setup.conf
 
 network_install
 
@@ -38,13 +37,13 @@ microcode_install
 graphics_install
 
 # If this file run without configuration, ask for basic user info before setting up user
-if ! source $HOME/ArchInstaller/configs/setup.conf; then
+if ! source "$HOME"/archinstaller/configs/setup.conf; then
     user_info
 fi
 
 add_user
 
-if [[ ${FS} == "luks" ]]; then
+if [[ "${FS}" == "luks" ]]; then
     # Making sure to edit mkinitcpio conf if luks is selected
     # add encrypt in mkinitcpio.conf before filesystems in hooks
     sed -i 's/filesystems/encrypt filesystems/g' /etc/mkinitcpio.conf

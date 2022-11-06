@@ -7,14 +7,14 @@
 # @stderror Output routed to install.log
 
 logo
+
 echo -ne "
 Final Setup and Configurations
 GRUB EFI Bootloader Install & Check
 "
-source ${HOME}/ArchInstaller/configs/setup.conf
 
 if [[ -d "/sys/firmware/efi" ]]; then
-  grub-install --efi-directory=/boot ${DISK}
+  grub-install --efi-directory=/boot "${DISK}"
 fi
 
 grub_config
@@ -72,8 +72,8 @@ sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: A
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "Cleaning up installation files"
-rm -r $HOME/ArchInstaller
-rm -r /home/$USERNAME/ArchInstaller
+rm -r "$HOME"/archinstaller
+rm -r /home/"$USERNAME"/archinstaller
 
 # Replace in the same state
-cd $pwd
+cd "$pwd" || return

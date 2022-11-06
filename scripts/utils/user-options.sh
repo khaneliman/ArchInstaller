@@ -13,8 +13,8 @@ aur_helper() {
     echo -ne "Please enter your desired AUR helper:\n"
     options=(paru yay picaur aura trizen pacaur none)
     select_option $? 4 "${options[@]}"
-    aur_helper=${options[$?]}
-    set_option AUR_HELPER $aur_helper
+    aur_helper="${options[$?]}"
+    set_option AUR_HELPER "$aur_helper"
 }
 
 # @description Choose Desktop Environment
@@ -24,8 +24,8 @@ desktop_environment() {
     echo -ne "Please select your desired Desktop Enviroment:\n"
     options=($(for f in pkg-files/*.txt; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done))
     select_option $? 4 "${options[@]}"
-    desktop_env=${options[$?]}
-    set_option DESKTOP_ENV $desktop_env
+    desktop_env="${options[$?]}"
+    set_option DESKTOP_ENV "$desktop_env"
 }
 
 # @description Disk selection for drive to be used with installation.
@@ -45,7 +45,7 @@ Select the disk to install on: '
     options=("$(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}')")
 
     select_option $? 1 "${options[@]}"
-    disk=${options[$?]%|*}
+    disk="${options[$?]%|*}"
 
     echo -e "\n${disk%|*} selected \n"
     set_option DISK "${disk%|*}"
@@ -94,8 +94,8 @@ install_type() {
   Server Install: Installs only base system without a desktop environment\n"
     options=(FULL MINIMAL SERVER)
     select_option $? 4 "${options[@]}"
-    install_type=${options[$?]}
-    set_option INSTALL_TYPE $install_type
+    install_type="${options[$?]}"
+    set_option INSTALL_TYPE "$install_type"
 }
 
 # @description Set user's keyboard mapping.
@@ -107,10 +107,10 @@ Please select key board layout from this list"
     options=(us by ca cf cz de dk es et fa fi fr gr hu il it lt lv mk nl no pl ro ru sg ua uk)
 
     select_option $? 4 "${options[@]}"
-    keymap=${options[$?]}
+    keymap="${options[$?]}"
 
     echo -ne "Your key boards layout: ${keymap} \n"
-    set_option KEYMAP $keymap
+    set_option KEYMAP "$keymap"
 }
 
 # @description Set btrfs subvolumes to be used during install
@@ -167,16 +167,16 @@ System detected your timezone to be '$time_zone' \n"
     options=("Yes" "No")
     select_option $? 1 "${options[@]}"
 
-    case ${options[$?]} in
+    case "${options[$?]}" in
     y | Y | yes | Yes | YES)
         echo "${time_zone} set as timezone"
-        set_option TIMEZONE $time_zone
+        set_option TIMEZONE "$time_zone"
         ;;
     n | N | no | NO | No)
         echo "Please enter your desired timezone e.g. Europe/London :"
         read new_timezone
         echo "${new_timezone} set as timezone"
-        set_option TIMEZONE $new_timezone
+        set_option TIMEZONE "$new_timezone"
         ;;
     *)
         echo "Wrong option. Try again"
@@ -199,7 +199,7 @@ user_info() {
         fi
         echo "Incorrect username."
     done
-    set_option USERNAME ${username,,} # convert to lower case as in issue #109
+    set_option USERNAME "${username,,}" # convert to lower case as in issue #109
 
     set_password "PASSWORD"
 
@@ -216,5 +216,5 @@ user_info() {
             break
         fi
     done
-    set_option NAME_OF_MACHINE $nameofmachine
+    set_option NAME_OF_MACHINE "$nameofmachine"
 }

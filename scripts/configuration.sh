@@ -8,9 +8,8 @@
 
 # @setting-header General Settings
 # @setting CONFIG_FILE string[$CONFIGS_DIR/setup.conf] Location of setup.conf to be used by set_option and all subsequent scripts.
-CONFIG_FILE=$CONFIGS_DIR/setup.conf
-if [ ! -f $CONFIG_FILE ]; then # check if file exists
-    touch -f $CONFIG_FILE      # create file if not exists
+if [ ! -f "$CONFIG_FILE" ]; then # check if file exists
+    touch -f "$CONFIG_FILE"      # create file if not exists
 fi
 
 # Starting functions
@@ -21,7 +20,7 @@ user_info
 clear
 logo
 install_type
-if [[ ! $INSTALL_TYPE == SERVER ]]; then
+if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
     clear
     logo
     aur_helper
@@ -42,4 +41,4 @@ clear
 logo
 keymap
 
-cat $CONFIG_FILE
+cat "$CONFIG_FILE"
