@@ -57,7 +57,7 @@ base_install() {
                 continue
             fi
             echo "INSTALLING: ${line}"
-            sudo pacman -S --noconfirm --needed --color=always "${line}"
+            pacman -S --noconfirm --needed --color=always "${line}"
         done
     fi
 }
