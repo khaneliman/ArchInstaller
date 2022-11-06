@@ -31,7 +31,7 @@ if [[ ! $INSTALL_TYPE == SERVER ]]; then
 fi
 clear
 logo
-diskpart
+disk_select
 clear
 logo
 filesystem

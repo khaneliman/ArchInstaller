@@ -10,10 +10,8 @@ logo
 iso=$(curl -4 ifconfig.co/country-iso)
 timedatectl set-ntp true
 pacman -S --noconfirm --color=always archlinux-keyring #update keyrings to latest to prevent packages failing to install
-pacman -S --noconfirm --needed --color=always pacman-contrib terminus-font
-setfont ter-v22b
+pacman -S --noconfirm --needed --color=always pacman-contrib reflector rsync grub
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-pacman -S --noconfirm --needed --color=always reflector rsync grub
 
 # Update mirrors
 mirrorlist_update

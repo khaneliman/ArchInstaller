@@ -28,6 +28,35 @@ desktop_environment() {
     set_option DESKTOP_ENV $desktop_env
 }
 
+# @description Disk selection for drive to be used with installation.
+# @noargs
+disk_select() {
+    echo -ne "
+------------------------------------------------------------------------
+    THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK
+    Please make sure you know what you are doing because
+    after formatting your disk there is no way to get data back
+------------------------------------------------------------------------
+
+"
+
+    PS3='
+Select the disk to install on: '
+    options=("$(lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk"{print "/dev/"$2"|"$3}')")
+
+    select_option $? 1 "${options[@]}"
+    disk=${options[$?]%|*}
+
+    echo -e "\n${disk%|*} selected \n"
+    set_option DISK "${disk%|*}"
+    if [[ "$(lsblk -n --output TYPE,ROTA | awk '$1=="disk"{print $2}')" -eq "0" ]]; then
+        set_option "MOUNT_OPTION" "noatime,compress=zstd,ssd,commit=120"
+    else
+        set_option "MOUNT_OPTION" "noatime,compress=zstd,commit=120"
+    fi
+
+}
+
 # @description This function will handle file systems. At this movement we are handling only
 # btrfs and ext4. Others will be added in future.
 # @noargs
@@ -92,6 +121,7 @@ set_btrfs() {
     echo "like @home, [defaults are @home, @var, @tmp, @.snapshots]"
     echo " "
     read -r -p "press enter to use default: " -a ARR
+
     if [[ -z "${ARR[*]}" ]]; then
         set_option "SUBVOLUMES" "(@ @home @var @tmp @.snapshots)"
     else
@@ -105,8 +135,9 @@ set_btrfs() {
         done
         IFS=" " read -r -a SUBS <<<"$(tr ' ' '\n' <<<"${NAMES[@]}" | awk '!x[$0]++' | tr '\n' ' ')"
         set_option "SUBVOLUMES" "${SUBS[*]}"
-        set_option "MOUNTPOINT" "/mnt"
     fi
+
+    set_option "MOUNTPOINT" "/mnt"
 }
 
 # @description Read and verify user password before setting
