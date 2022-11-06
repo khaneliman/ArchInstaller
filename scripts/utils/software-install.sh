@@ -6,6 +6,15 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+arch_install() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Arch Install on Main Drive
+-------------------------------------------------------------------------
+"
+    pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+}
+
 # @description Installs software from the AUR
 # @noargs
 aur_helper_install() {
@@ -53,6 +62,22 @@ base_install() {
     fi
 }
 
+# @description Install bootloader
+# @noargs
+bootloader_install() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    GRUB BIOS Bootloader Install & Check
+-------------------------------------------------------------------------
+"
+    if [[ ! -d "/sys/firmware/efi" ]]; then
+        grub-install --boot-directory=/mnt/boot "${DISK}"
+    else
+        pacstrap /mnt efibootmgr --noconfirm --needed --color=always
+    fi
+
+}
+
 # @description Installs desktop environment packages from base repositories
 # @noargs
 desktop_environment_install() {
@@ -69,6 +94,63 @@ desktop_environment_install() {
         echo "INSTALLING: ${line}"
         sudo pacman -S --noconfirm --needed --color=always "${line}"
     done
+}
+
+# @description Enable essential services
+# @noargs
+essential_services() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Enabling Essential Services
+-------------------------------------------------------------------------
+"
+    # services part of the base installation
+    echo "Enabling NetworkManager"
+    systemctl enable NetworkManager.service
+    echo "NetworkManager enabled \n"
+
+    echo "Enabling Periodic Trim"
+    systemctl enable fstrim.timer
+    echo "Periodic Trim enabled \n"
+
+    if [[ ${INSTALL_TYPE} == "FULL" ]]; then
+
+        # services part of full installation
+        echo "Enabling Cups"
+        systemctl enable cups.service
+        echo "  Cups enabled \n"
+
+        echo "Syncing time with ntp"
+        ntpd -qg
+        echo "Time synced \n"
+
+        echo "Enabling ntpd"
+        systemctl enable ntpd.service
+        echo "NTP enabled \n"
+
+        echo "Disabling DHCP"
+        systemctl disable dhcpcd.service
+        echo "DHCP disabled \n"
+
+        echo "Stopping DHCP"
+        systemctl stop dhcpcd.service
+        echo "DHCP stopped \n"
+
+        echo "Enabling Bluetooth"
+        systemctl enable bluetooth
+        echo "Bluetooth enabled \n"
+
+        echo "Enabling Avahi"
+        systemctl enable avahi-daemon.service
+        echo "Avahi enabled \n"
+
+        if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
+            snapper_config
+        fi
+
+        plymouth_config
+
+    fi
 }
 
 # @description Installs graphics drivers depending on detected gpu

@@ -46,6 +46,18 @@ pacman_check() {
     fi
 }
 
+# @description Checks if drive is mounted
+# @noargs
+mount_check() {
+    if ! grep -qs '/mnt' /proc/mounts; then
+        echo "Drive is not mounted can not continue"
+        echo "Rebooting in 3 Seconds ..." && sleep 1
+        echo "Rebooting in 2 Seconds ..." && sleep 1
+        echo "Rebooting in 1 Second ..." && sleep 1
+        reboot now
+    fi
+}
+
 # @description Run all checks necessary before running script
 # @noargs
 background_checks() {
