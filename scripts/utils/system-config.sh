@@ -228,19 +228,25 @@ grub_config() {
     echo -e "Installing CyberRe Grub theme..."
     THEME_DIR="/boot/grub/themes"
     THEME_NAME=CyberRe
-    echo -e "Creating the theme directory..."
+
+    echo -e "\n Creating the theme directory..."
     mkdir -p "${THEME_DIR}"/"${THEME_NAME}"
-    echo -e "Copying the theme..."
+
+    echo -e "\n Copying the theme..."
     cd "${HOME}"/archinstaller || return
     cp -a configs"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
-    echo -e "Backing up Grub config..."
+
+    echo -e "\n Backing up Grub config..."
     cp -an /etc/default/grub /etc/default/grub.bak
-    echo -e "Setting the theme as the default..."
+
+    echo -e "\n Setting the theme as the default..."
     grep "GRUB_THEME=" /etc/default/grub 2>&1 >/dev/null && sed -i '/GRUB_THEME=/d' /etc/default/grub
     echo "GRUB_THEME=\"${THEME_DIR}"/"${THEME_NAME}"/theme.txt\" >>/etc/default/grub
-    echo -e "Updating grub..."
+
+    echo -e "\n Updating grub..."
     grub-mkconfig -o /boot/grub/grub.cfg
-    echo -e "All set!"
+
+    echo -e "\n All set!"
 }
 
 # @description Set locale, timezone, and keymap
@@ -308,7 +314,9 @@ plymouth_config() {
     PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/usr/share/plymouth/themes
     PLYMOUTH_THEME="arch-glow" # can grab from config later if we allow selection
     mkdir -p "/usr/share/plymouth/themes"
-    echo 'Installing Plymouth theme...'
+
+    echo -e "Installing Plymouth theme... \n"
+
     cp -rf "${PLYMOUTH_THEMES_DIR}"/"${PLYMOUTH_THEME}" /usr/share/plymouth/themes
     if [[ "${FS}" == "luks" ]]; then
         sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf             # add plymouth after base udev
@@ -317,7 +325,8 @@ plymouth_config() {
         sed -i 's/HOOKS=(base udev*/& plymouth/' /etc/mkinitcpio.conf # add plymouth after base udev
     fi
     plymouth-set-default-theme -R arch-glow # sets the theme and runs mkinitcpio
-    echo 'Plymouth theme installed'
+
+    echo -e "\n Plymouth theme installed"
 }
 
 # @description Configure snapper default setup
