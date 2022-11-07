@@ -1,10 +1,13 @@
 # Reference
-
 **Library Files**
-
--   [scripts/configuration.sh](REFERENCE-startup.md)
--   [scripts/0-preinstall.sh](REFERENCE-0-preinstall.md)
--   [archtitus.sh](REFERENCE-archtitus.md)
--   [scripts/1-setup.sh](REFERENCE-1-setup.md)
--   [scripts/3-post-setup.sh](REFERENCE-3-post-setup.md)
--   [scripts/2-user.sh](REFERENCE-2-user.md)
+* [scripts/utils/installer-helper.sh](REFERENCE-installer-helper.md)
+* [scripts/0-preinstall.sh](REFERENCE-0-preinstall.md)
+* [scripts/utils/software-install.sh](REFERENCE-software-install.md)
+* [scripts/utils/user-options.sh](REFERENCE-user-options.md)
+* [scripts/1-setup.sh](REFERENCE-1-setup.md)
+* [scripts/utils/system-checks.sh](REFERENCE-system-checks.md)
+* [install.sh](REFERENCE-install.md)
+* [scripts/3-post-setup.sh](REFERENCE-3-post-setup.md)
+* [scripts/configuration.sh](REFERENCE-configuration.md)
+* [scripts/2-user.sh](REFERENCE-2-user.md)
+* [scripts/utils/system-config.sh](REFERENCE-system-config.md)
