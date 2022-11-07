@@ -47,8 +47,8 @@ cpu_config() {
 "
     TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
     if [[ "$TOTAL_MEM" -gt 8000000 ]]; then
-        sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$nc\"/g" /etc/makepkg.conf
-        sed -i "s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T $nc -z -)/g" /etc/makepkg.conf
+        sed -i "s/^#\(MAKEFLAGS=\"-j\)2\"/\1$nc\"/;
+        /^COMPRESSXZ=(xz -c -z -)/s/-c /&-T $nc /" /etc/makepkg.conf
     fi
 }
 
@@ -62,7 +62,7 @@ create_filesystems() {
 "
     set -e
 
-    if [[ "${DISK}" =~ "nvme" ]]; then
+    if [[ "${DISK}" =~ "nvme" || "${DISK}" =~ "mmc" ]]; then
         partition2="${DISK}"p2
         partition3="${DISK}"p3
     else
@@ -201,9 +201,7 @@ format_disk() {
     echo -e "\n Creating third partition: ROOT"
     sgdisk -n 3::-0 --typecode=3:8300 --change-name=3:'ROOT' "${DISK}" # partition 3 (Root), default start, remaining
 
-    if [[ ! -d "/sys/firmware/efi" ]]; then # Checking for bios system
-        sgdisk -A 1:set:2 "${DISK}"
-    fi
+    [[ ! -d "/sys/firmware/efi" ]] && sgdisk -A 1:set:2 "${DISK}"
 
     partprobe "${DISK}" # reread partition table to ensure it is correct
 
@@ -257,7 +255,7 @@ locale_config() {
                     Setup Language to US and set locale  
 -------------------------------------------------------------------------
 "
-    sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    sed -i '/^#en_US.UTF-8 /s/^#//' /etc/locale.gen
     locale-gen
     timedatectl --no-ask-password set-timezone "${TIMEZONE}"
     timedatectl --no-ask-password set-ntp 1

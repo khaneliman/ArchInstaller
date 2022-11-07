@@ -21,9 +21,7 @@ Final Setup and Configurations
 GRUB EFI Bootloader Install & Check
 "
 
-if [[ -d "/sys/firmware/efi" ]]; then
-  grub-install --efi-directory=/boot "${DISK}"
-fi
+[[ -d "/sys/firmware/efi" ]] && grub-install --efi-directory=/boot "${DISK}"
 
 grub_config
 
@@ -38,14 +36,12 @@ echo -ne "
 "
 
 echo "Cleaning up sudoers file"
-# Remove no password sudo rights
-sed -i 's/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
-# Add sudo rights
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+# Remove no password sudo rights, add sudo rights
+sed -Ei 's/^%wheel ALL=\(ALL(:ALL)?\) NOPASSWD: ALL/# &/;
+s/^# (%wheel ALL=\(ALL(:ALL)?\) ALL)/\1/' /etc/sudoers
 
 echo "Cleaning up installation files"
-rm -r "$HOME"/archinstaller
-rm -r /home/"$USERNAME"/archinstaller
+rm -r "$HOME"/archinstaller /home/"$USERNAME"/archinstaller
 
 # Replace in the same state
 clear

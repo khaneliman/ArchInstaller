@@ -52,12 +52,10 @@ base_install() {
     # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
         sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/pkg-files/pacman-pkgs.txt | while read line; do
-            if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                continue
-            fi
+            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
             echo "INSTALLING: ${line}"
-            sudo pacman -S --noconfirm --needed --color=always "${line}"
+            pacman -S --noconfirm --needed --color=always "${line}"
         done
     fi
 }
@@ -87,10 +85,8 @@ desktop_environment_install() {
 -------------------------------------------------------------------------
 "
     sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/pkg-files/"${DESKTOP_ENV}".txt | while read line; do
-        if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
-            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-            continue
-        fi
+        # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+        [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
         echo "INSTALLING: ${line}"
         sudo pacman -S --noconfirm --needed --color=always "${line}"
     done
@@ -168,10 +164,8 @@ graphics_install() {
         nvidia-xconfig
     elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
         pacman -S --noconfirm --needed --color=always xf86-video-amdgpu
-    elif grep -E "Integrated Graphics Controller" <<<"${gpu_type}"; then
+    elif grep -E "Integrated Graphics Controller|Intel Corporation UHD" <<<"${gpu_type}"; then
         pacman -S --noconfirm --needed --color=always libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-    elif grep -E "Intel Corporation UHD" <<<"${gpu_type}"; then
-        pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
     fi
 }
 
