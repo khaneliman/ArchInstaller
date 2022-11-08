@@ -218,7 +218,7 @@ user_theming() {
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
         if [[ "$DESKTOP_ENV" == "kde" ]]; then
-            cp -r ~/archinstaller/configs/.config/* ~/.config/
+            cp -r ~/archinstaller/configs/.config/kitty ~/.config/
             pip install konsave
             konsave -i ~/archinstaller/configs/kde.knsv
             sleep 1
@@ -226,6 +226,8 @@ user_theming() {
         elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
             git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
             ./dotfiles-openbox/install-titus.sh
+        elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
+            cp -r ~/archinstaller/configs/.config/awesome ~/.config/
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi

@@ -25,6 +25,7 @@ bluez
 bluez-libs
 bluez-utils
 bridge-utils
+btop
 btrfs-progs
 celluloid
 cmatrix
@@ -38,6 +39,7 @@ dtc
 efibootmgr
 egl-wayland
 exfat-utils
+fastfetch
 flex
 fuse2
 fuse3
@@ -65,7 +67,6 @@ lib32-pipewire
 lib32-pipewire-jack
 m4
 make
-neofetch
 ntfs-3g
 ntp
 openbsd-netcat
@@ -105,6 +106,3 @@ wine-mono
 winetricks
 wireplumber
 zip
-zsh
-zsh-syntax-highlighting
-zsh-autosuggestions
