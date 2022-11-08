@@ -23,17 +23,13 @@ cd archinstaller
 
 ### System Description
 
-This is completely automated arch install. It includes prompts to select your desired desktop environment, window manager, AUR helper, and whether to do a full or minimal install. The KDE desktop environment on arch includes all the packages I use on a daily basis, as well as some customizations.
+This is completely automated arch install. It includes prompts to select your desired desktop environment, window manager, AUR helper, and whether to do a full or minimal install. Some environments contain user theming and customization out of the box. 
 
 ## Documentation
 
 The package selection and their purpose is detailed in the **[PKG_Documentation.md](PKG_Documentation.md)** file.
 
 ## Troubleshooting
-
-**[Arch Linux RickEllis Installation Guide](https://github.com/rickellis/Arch-Linux-Install-Guide)**
-
-**[Arch Linux Wiki Installation Guide](https://wiki.archlinux.org/title/Installation_guide)**
 
 The main script will generate .log files for every script that is run as part of the installation process. These log files contain the terminal output so you can review any warnings or errors that occurred during installation and aid in troubleshooting.
 
@@ -46,8 +42,3 @@ An issue is easier to resolve if it contains a few important pieces of informati
 1. What commit/branch you used
 1. Where you were installing (VMWare, Virtualbox, Virt-Manager, Baremetal, etc)
     1. If a VM, what was the configuration used.
-
-## Credits
-
-- Original packages script was a post install cleanup script called ArchMatic located here: <https://github.com/rickellis/ArchMatic>
-- Thank you to all the folks that helped during the creation from YouTube Chat! Here are all those Livestreams showing the creation: <https://www.youtube.com/watch?v=IkMCtkDIhe8&list=PLc7fktTRMBowNaBTsDHlL6X3P3ViX3tYg>
