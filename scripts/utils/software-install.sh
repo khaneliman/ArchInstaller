@@ -29,7 +29,7 @@ aur_helper_install() {
         makepkg -si --noconfirm
         # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
         # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/pkg-files/aur-pkgs.txt | while read line; do
+        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/aur-pkgs.txt | while read line; do
             if [[ "${line}" == '--END OF MINIMAL INSTALL--' ]]; then
                 # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
                 continue
@@ -51,7 +51,7 @@ base_install() {
     # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
     # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/pkg-files/pacman-pkgs.txt | while read line; do
+        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/pacman-pkgs.txt | while read line; do
             # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
             [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
             echo "INSTALLING: ${line}"
@@ -84,12 +84,17 @@ desktop_environment_install() {
                     Installing Desktop Environment Software  
 -------------------------------------------------------------------------
 "
-    sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/pkg-files/"${DESKTOP_ENV}".txt | while read line; do
-        # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-        [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-        echo "INSTALLING: ${line}"
-        sudo pacman -S --noconfirm --needed --color=always "${line}"
-    done
+    INSTALL_STRING="sudo pacman -S --noconfirm --needed --color=always "
+    sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".txt | (
+        while read line; do
+            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
+            INSTALL_STRING+=" $line"
+        done
+
+        echo "Installing $DESKTOP_ENV"
+        eval "$INSTALL_STRING"
+    )
 }
 
 # @description Enable essential services
