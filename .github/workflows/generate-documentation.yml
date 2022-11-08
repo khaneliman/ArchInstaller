@@ -18,6 +18,9 @@ jobs:
             - name: genshdoc result
               run: echo "The result of genshdoc Action was ${{ steps.action-genshdoc.outputs.result }}"
 
+            - name: Move REFERENCE to docs
+              run: mkdir -p docs && mv REFERENCE*.md docs/
+
             - name: Commit files
               run: |
                   echo ${{ github.ref }}
