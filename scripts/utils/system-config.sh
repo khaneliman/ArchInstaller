@@ -223,16 +223,16 @@ grub_config() {
     # set kernel parameter for adding splash screen
     sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 
-    echo -e "Installing CyberRe Grub theme..."
+    echo -e "Installing Vimix Grub theme..."
     THEME_DIR="/boot/grub/themes"
-    THEME_NAME=CyberRe
+    THEME_NAME=Vimix
 
     echo -e "\n Creating the theme directory..."
     mkdir -p "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Copying the theme..."
     cd "${HOME}"/archinstaller || return
-    cp -a configs"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
+    cp -a configs/base"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Backing up Grub config..."
     cp -an /etc/default/grub /etc/default/grub.bak

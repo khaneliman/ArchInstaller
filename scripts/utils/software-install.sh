@@ -271,7 +271,7 @@ user_theming() {
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
             git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
-            sudo cp -r ~/archinstaller/configs/etc/xdg/awesome /etc/xdg/awesome
+            sudo cp -r ~/archinstaller/configs/base/etc/xdg/awesome /etc/xdg/awesome
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi
