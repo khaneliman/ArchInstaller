@@ -269,6 +269,7 @@ user_theming() {
             git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
             ./dotfiles-openbox/install-titus.sh
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
+            git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
             sudo cp -r ~/archinstaller/configs/etc/xdg/awesome /etc/xdg/awesome
         else
