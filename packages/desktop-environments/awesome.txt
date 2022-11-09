@@ -21,6 +21,7 @@ gsimplecal
 gtk2-perl
 imagemagick
 jq
+kde-gtk-config
 kitty
 kio-fuse
 kio-gdrive

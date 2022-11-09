@@ -309,7 +309,7 @@ plymouth_config() {
                 Enabling (and Theming) Plymouth Boot Splash
   -------------------------------------------------------------------------
   "
-    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/usr/share/plymouth/themes
+    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/base/usr/share/plymouth/themes
     PLYMOUTH_THEME="arch-glow" # can grab from config later if we allow selection
     mkdir -p "/usr/share/plymouth/themes"
 
@@ -336,11 +336,11 @@ snapper_config() {
   -------------------------------------------------------------------------
   "
 
-    SNAPPER_CONF="$HOME"/archinstaller/configs/etc/snapper/configs/root
+    SNAPPER_CONF="$HOME"/archinstaller/configs/base/etc/snapper/configs/root
     mkdir -p /etc/snapper/configs/
     cp -rfv "${SNAPPER_CONF}" /etc/snapper/configs/
 
-    SNAPPER_CONF_D="$HOME"/archinstaller/configs/etc/conf.d/snapper
+    SNAPPER_CONF_D="$HOME"/archinstaller/configs/bse/etc/conf.d/snapper
     mkdir -p /etc/conf.d/
     cp -rfv "${SNAPPER_CONF_D}" /etc/conf.d/
 }

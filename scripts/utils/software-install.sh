@@ -206,6 +206,8 @@ graphics_install() {
         pacman -S --noconfirm --needed --color=always xf86-video-amdgpu
     elif grep -E "Integrated Graphics Controller|Intel Corporation UHD" <<<"${gpu_type}"; then
         pacman -S --noconfirm --needed --color=always libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
+    else
+        echo "No graphics drivers required"
     fi
 }
 
@@ -258,19 +260,16 @@ user_theming() {
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
         if [[ "$DESKTOP_ENV" == "kde" ]]; then
-            cp -r ~/archinstaller/configs/.config/kitty ~/.config/kitty
+            cp -r ~/archinstaller/configs/kde/home/. ~/
             pip install konsave
-            konsave -i ~/archinstaller/configs/kde.knsv
+            konsave -i ~/archinstaller/configs/kde/kde.knsv
             sleep 1
             konsave -a kde
         elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
             git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
             ./dotfiles-openbox/install-titus.sh
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
-            cp -r ~/archinstaller/configs/.config/awesome ~/.config/awesome
-            cp -r ~/archinstaller/configs/.config/Kvantum ~/.config/Kvantum
-            cp -r ~/archinstaller/configs/.config/qt5ct ~/.config/qt5ct
-            cp -r ~/archinstaller/configs/.config/qt6ct ~/.config/qt6ct
+            cp -r ~/archinstaller/configs/awesome/home/. ~/
             sudo cp -r ~/archinstaller/configs/etc/xdg/awesome /etc/xdg/awesome
         else
             echo -e "No theming setup for $DESKTOP_ENV"
