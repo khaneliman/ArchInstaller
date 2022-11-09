@@ -9,8 +9,45 @@ local modkey = require('configuration.keys.mod').mod_key
 local altkey = require('configuration.keys.mod').alt_key
 local apps = require('configuration.apps')
 
+-- Helper functions for sane(er) keyboard resizing in layout.suit.tile.* modes
+local function resize_horizontal(factor)
+    local layout = awful.layout.get(awful.screen.focused())
+    if layout == awful.layout.suit.tile then
+        awful.tag.incmwfact(-factor)
+    elseif layout == awful.layout.suit.tile.left then
+        awful.tag.incmwfact(factor)
+    elseif layout == awful.layout.suit.tile.top then
+        awful.client.incwfact(-factor)
+    elseif layout == awful.layout.suit.tile.bottom then
+        awful.client.incwfact(-factor)
+    end
+end
+
+local function resize_vertical(factor)
+    local layout = awful.layout.get(awful.screen.focused())
+    if layout == awful.layout.suit.tile then
+        awful.client.incwfact(-factor)
+    elseif layout == awful.layout.suit.tile.left then
+        awful.client.incwfact(-factor)
+    elseif layout == awful.layout.suit.tile.top then
+        awful.tag.incmwfact(-factor)
+    elseif layout == awful.layout.suit.tile.bottom then
+        awful.tag.incmwfact(factor)
+    end
+end
+
 -- Key bindings
 local global_keys = awful.util.table.join(
+
+-- Layout-aware resizing
+    -- awful.key({ altkey, "Shift"   }, "h", function () resize_horizontal(0.05) end,
+    --           { group = "layout", description = "increase master width factor" }),
+    -- awful.key({ altkey, "Shift"   }, "l", function () resize_horizontal(-0.05) end,
+    --           { group = "layout", description = "decrease master width factor" }),
+    -- awful.key({ altkey, "Shift"   }, "k", function () resize_vertical(-0.05) end,
+    --           { group = "layout", description = "increase master width factor" }),
+    -- awful.key({ altkey, "Shift"   }, "j", function () resize_vertical(0.05) end,
+    --          { group = "layout", description = "decrease master width factor" }),
 
 	-- Hotkeys
 	awful.key(

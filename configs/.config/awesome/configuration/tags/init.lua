@@ -3,6 +3,9 @@ local gears = require('gears')
 local beautiful = require('beautiful')
 local icons = require('theme.icons')
 local apps = require('configuration.apps')
+local bling = require("bling")
+local naughty = require("naughty")
+local wibox = require("wibox")
 
 local tags = {
 	{
@@ -134,22 +137,6 @@ local update_gap_and_shape = function(t)
 	end
 end
 
--- Change tag's client's shape and gap on change
-tag.connect_signal(
-	'property::layout',
-	function(t)
-		update_gap_and_shape(t)
-	end
-)
-
--- Change tag's client's shape and gap on move to tag
-tag.connect_signal(
-	'tagged',
-	function(t)
-		update_gap_and_shape(t)
-	end
-)
-
 -- Focus on urgent clients
 awful.tag.attached_connect_signal(
 	s,
@@ -166,3 +153,75 @@ awful.tag.attached_connect_signal(
 		end
 	end
 )
+
+-- Change tag's client's shape and gap on change
+tag.connect_signal(
+	'property::layout',
+	function(t)
+		update_gap_and_shape(t)
+	end
+)
+
+-- Change tag's client's shape and gap on move to tag
+tag.connect_signal(
+	'tagged',
+	function(t)
+		update_gap_and_shape(t)
+	end
+)
+
+-- TODO : HOOK UP BLING TAG PREVIEWS
+
+-- tag.connect_signal(
+-- 	'mouse::enter',
+-- 	function(t)
+-- 		naughty.notify({ title = "bling", text = "blingy mcbling", timeout = 0 })
+-- 		-- BLING: Only show widget when there are clients in the tag
+-- 		if t.clients() > 0 then
+-- 			-- BLING: Update the widget with the new tag
+-- 			awesome.emit_signal("bling::tag_preview::update", t)
+-- 			-- BLING: Show the widget
+-- 			awesome.emit_signal("bling::tag_preview::visibility", s, true)
+-- 		end
+
+-- 		if self.bg ~= '#ff0000' then
+-- 			self.backup     = self.bg
+-- 			self.has_backup = true
+-- 		end
+
+-- 		self.bg = '#ff0000'
+-- 	end
+-- )
+
+-- tag.connect_signal(
+-- 	'mouse::leave', 
+-- 	function(t)
+-- 		-- BLING: Turn the widget off
+-- 		awesome.emit_signal("bling::tag_preview::visibility", s, false)
+
+-- 		if self.has_backup then self.bg = self.backup end
+-- 	end
+-- )
+
+bling.widget.tag_preview.enable {
+    show_client_content = false,  -- Whether or not to show the client content
+    x = 10,                       -- The x-coord of the popup
+    y = 10,                       -- The y-coord of the popup
+    scale = 0.25,                 -- The scale of the previews compared to the screen
+    honor_padding = false,        -- Honor padding when creating widget size
+    honor_workarea = false,       -- Honor work area when creating widget size
+    placement_fn = function(c)    -- Place the widget using awful.placement (this overrides x & y)
+        awful.placement.top_left(c, {
+            margins = {
+                top = 30,
+                left = 30
+            }
+        })
+    end,
+    background_widget = wibox.widget {    -- Set a background image (like a wallpaper) for the widget 
+        image = beautiful.wallpaper,
+        horizontal_fit_policy = "fit",
+        vertical_fit_policy   = "fit",
+        widget = wibox.widget.imagebox
+    }
+}

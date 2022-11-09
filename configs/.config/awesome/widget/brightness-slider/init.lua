@@ -6,6 +6,8 @@ local spawn = awful.spawn
 local dpi = beautiful.xresources.apply_dpi
 local icons = require('theme.icons')
 local clickable_container = require('widget.clickable-container')
+local notifications = require('module.notifications')
+local notif
 
 local icon = wibox.widget {
 	layout = wibox.layout.align.vertical,
@@ -111,9 +113,27 @@ local update_slider = function()
 		end
 	)
 end
+local not_available
+local brightness_controller_found= function()
+	awful.spawn.easy_async_with_shell(
+		'light', 
+		function(stdout)
+			not_available = string.find(stdout, 'No backlight controller was found')
+			-- local not_available = string.match(stdout, '(\\b(\\w*No backlight controller was found\\w*)\\b)')
+		notif = notifications.notify_dwim({ 
+			message = 'Available: ' .. not_available .. '\n',
+			title = 'Brightness Controller',
+			app_name = 'AwesomeWM',
+			icon = require('beautiful').awesome_icon
+		}, notif)
+		end
+	)
+end
 
 -- Update on startup
 update_slider()
+
+brightness_controller_found()
 
 local action_jump = function()
 	local sli_value = brightness_slider:get_value()
