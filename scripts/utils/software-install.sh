@@ -93,7 +93,7 @@ btrfs_install() {
                     Installing Btrfs Packages
 -------------------------------------------------------------------------
 "
-    if [[ ! "$FS" == btrfs ]]; then
+    if [[ "$FS" == btrfs ]]; then
         INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
 
         # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
