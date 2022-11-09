@@ -16,6 +16,8 @@ source $HOME/archinstaller/configs/setup.conf
 
 logo
 
+btrfs_install
+
 network_install
 
 pacman -S --noconfirm --needed --color=always pacman-contrib curl

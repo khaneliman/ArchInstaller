@@ -29,11 +29,14 @@ aur_helper_install() {
         makepkg -si --noconfirm
         # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
         # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/aur-pkgs.txt | while read line; do
-            if [[ "${line}" == '--END OF MINIMAL INSTALL--' ]]; then
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                continue
-            fi
+        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/aur.txt | while read line; do
+            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
+            echo "INSTALLING: ${line}"
+            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
+        done
+
+        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/aur/"$DESKTOP_ENV".txt | while read line; do
+            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
             echo "INSTALLING: ${line}"
             "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
         done
@@ -51,12 +54,18 @@ base_install() {
     # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
     # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/pacman-pkgs.txt | while read line; do
-            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            pacman -S --noconfirm --needed --color=always "${line}"
-        done
+        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
+
+        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/pacman.txt | (
+            while read line; do
+                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
+                INSTALL_STRING+=" $line"
+            done
+
+            echo "Installing base packages"
+            eval "$INSTALL_STRING"
+        )
     fi
 }
 
@@ -74,6 +83,32 @@ bootloader_install() {
         pacstrap /mnt efibootmgr --noconfirm --needed --color=always
     fi
 
+}
+
+# @description Installs btrfs packages
+# @noargs
+btrfs_install() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Installing Btrfs Packages
+-------------------------------------------------------------------------
+"
+    if [[ ! "$FS" == btrfs ]]; then
+        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
+
+        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
+        # stop the script and move on, not installing any more packages below that line
+        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/btrfs.txt | (
+            while read line; do
+                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
+                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
+                INSTALL_STRING+=" $line"
+            done
+
+            echo "Installing Btrfs Packages"
+            eval "$INSTALL_STRING"
+        )
+    fi
 }
 
 # @description Installs desktop environment packages from base repositories
@@ -165,7 +200,7 @@ graphics_install() {
     # Graphics Drivers find and install
     gpu_type=$(lspci)
     if grep -E "NVIDIA|GeForce" <<<"${gpu_type}"; then
-        pacman -S --noconfirm --needed --color=always nvidia
+        pacman -S --noconfirm --needed --color=always nvidia-dkms nvidia-settings
         nvidia-xconfig
     elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
         pacman -S --noconfirm --needed --color=always xf86-video-amdgpu
@@ -201,7 +236,7 @@ network_install() {
                     Network Setup 
 -------------------------------------------------------------------------
 "
-    pacman -S --noconfirm --needed --color=always networkmanager dhclient
+    pacman -S --noconfirm --needed --color=always networkmanager dhclient networkmanager-openvpn
     systemctl enable --now NetworkManager
 }
 

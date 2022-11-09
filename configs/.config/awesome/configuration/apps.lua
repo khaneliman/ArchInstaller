@@ -18,7 +18,7 @@ return {
 		-- Default game, can be a launcher like steam
 		game = 'steam',
 		-- Default graphics editor
-		graphics = 'gimp-2.10',
+		graphics = 'gimp',
 		-- Default sandbox
 		sandbox = 'virt-manager',
 		-- Default IDE

@@ -1,0 +1,24 @@
+--END OF MINIMAL INSTALL--
+autojump
+bottles
+davmail
+dxvk-bin
+github-desktop
+heroic-games-launcher-bin
+lightly-git
+lightlyshaders-git
+mangohud
+mangohud-common
+mkinitcpio-firmware
+mkinitcpio-nfs-utils
+needrestart
+nerd-fonts-fira-code
+ocs-url
+pacman-cleanup-hook
+plymouth-git
+protonup-qt
+topgrade
+ttf-meslo
+ttf-meslo-nerd-font-powerlevel10k
+ttf-oswald
+visual-studio-code-bin
