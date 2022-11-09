@@ -340,7 +340,7 @@ snapper_config() {
     mkdir -p /etc/snapper/configs/
     cp -rfv "${SNAPPER_CONF}" /etc/snapper/configs/
 
-    SNAPPER_CONF_D="$HOME"/archinstaller/configs/bse/etc/conf.d/snapper
+    SNAPPER_CONF_D="$HOME"/archinstaller/configs/base/etc/conf.d/snapper
     mkdir -p /etc/conf.d/
     cp -rfv "${SNAPPER_CONF_D}" /etc/conf.d/
 }

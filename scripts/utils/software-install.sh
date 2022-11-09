@@ -143,42 +143,42 @@ essential_services() {
     # services part of the base installation
     echo "Enabling NetworkManager"
     systemctl enable NetworkManager.service
-    echo "NetworkManager enabled \n"
+    echo -e "NetworkManager enabled \n"
 
     echo "Enabling Periodic Trim"
     systemctl enable fstrim.timer
-    echo "Periodic Trim enabled \n"
+    echo -e "Periodic Trim enabled \n"
 
     if [[ ${INSTALL_TYPE} == "FULL" ]]; then
 
         # services part of full installation
         echo "Enabling Cups"
         systemctl enable cups.service
-        echo "  Cups enabled \n"
+        echo -e "  Cups enabled \n"
 
         echo "Syncing time with ntp"
         ntpd -qg
-        echo "Time synced \n"
+        echo -e "Time synced \n"
 
         echo "Enabling ntpd"
         systemctl enable ntpd.service
-        echo "NTP enabled \n"
+        echo -e "NTP enabled \n"
 
         echo "Disabling DHCP"
         systemctl disable dhcpcd.service
-        echo "DHCP disabled \n"
+        echo -e "DHCP disabled \n"
 
         echo "Stopping DHCP"
         systemctl stop dhcpcd.service
-        echo "DHCP stopped \n"
+        echo -e "DHCP stopped \n"
 
         echo "Enabling Bluetooth"
         systemctl enable bluetooth
-        echo "Bluetooth enabled \n"
+        echo -e "Bluetooth enabled \n"
 
         echo "Enabling Avahi"
         systemctl enable avahi-daemon.service
-        echo "Avahi enabled \n"
+        echo -e "Avahi enabled \n"
 
         if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
             snapper_config
@@ -269,7 +269,7 @@ user_theming() {
             git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
             ./dotfiles-openbox/install-titus.sh
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
-            git submodule update --init
+            cd ~/archinstaller/ && git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
             sudo cp -r ~/archinstaller/configs/base/etc/xdg/awesome /etc/xdg/awesome
         else
