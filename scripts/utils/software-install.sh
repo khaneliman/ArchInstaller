@@ -12,7 +12,7 @@ arch_install() {
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-    pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+    pacstrap /mnt base base-devel linux linux-firmware linux-zen micro sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
 }
 
 # @description Installs software from the AUR
@@ -60,7 +60,7 @@ base_install() {
             while read line; do
                 # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
                 [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-                INSTALL_STRING+=" $line"
+                pacman -S --noconfirm --needed --color=always "$line"
             done
 
             echo "Installing base packages"
@@ -272,6 +272,8 @@ user_theming() {
             cd ~/archinstaller/ && git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
             sudo cp -r ~/archinstaller/configs/base/etc/xdg/awesome /etc/xdg/awesome
+            sudo mkdir -p /usr/share/wallpapers/
+            sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi

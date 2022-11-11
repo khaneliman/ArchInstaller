@@ -1,7 +1,6 @@
 binutils
 dosfstools
 linux-headers
-linux-zen
 linux-zen-headers
 mesa
 noto-fonts-emoji
@@ -66,6 +65,7 @@ gst-plugins-good
 gst-plugins-ugly
 haveged
 htop
+i2c-tools
 jdk-openjdk
 jq
 kitty

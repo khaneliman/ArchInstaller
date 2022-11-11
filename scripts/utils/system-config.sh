@@ -118,7 +118,7 @@ display_manager() {
     elif [[ "${DESKTOP_ENV}" == "lxde" ]]; then
         systemctl enable lxdm.service
 
-    elif [[ "${DESKTOP_ENV}" == "openbox" || "${DESKTOP_ENV}" == "awesome" ]]; then
+    elif [[ "${DESKTOP_ENV}" == "openbox" ]]; then
         systemctl enable lightdm.service
         if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
             echo -e "Setting LightDM Theme..."
@@ -126,6 +126,13 @@ display_manager() {
             sed -i 's/^webkit_theme\s*=\s*\(.*\)/webkit_theme = litarvan #\1/g' /etc/lightdm/lightdm-webkit2-greeter.conf
             # Set default lightdm greeter to lightdm-webkit2-greeter
             sed -i 's/#greeter-session=example.*/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
+        fi
+    elif [[ "${DESKTOP_ENV}" == "awesome" ]]; then
+        systemctl enable lightdm.service
+        if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
+            echo -e "Setting LightDM Theme..."
+            sudo cp ~/archinstaller/configs/awesome/etc/lightdm/slick-greeter.conf /etc/lightdm/slick-greeter.conf
+            sed -i 's/#greeter-session=example.*/greeter-session=lightdm-slick-greeter/g' /etc/lightdm/lightdm.conf
         fi
     # If none of the above, use lightdm as fallback
     else

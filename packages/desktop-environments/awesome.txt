@@ -1,8 +1,6 @@
 lightdm
-lightdm-gtk-greeter
+lightdm-slick-greeter
 lxsession
-rxvt-unicode
-thunar
 --END OF MINIMAL INSTALL--
 ark
 blueman
@@ -20,14 +18,14 @@ gnome-keyring
 gsimplecal
 gtk2-perl
 imagemagick
+iw
+iwd
 jq
 kde-gtk-config
 kitty
 kio-fuse
 kio-gdrive
 kvantum
-lightdm-webkit-theme-litarvan
-lightdm-webkit2-greeter
 lxappearance
 lua-fifo
 network-manager-applet
@@ -42,9 +40,6 @@ rofi
 rofi-calc
 rofi-emoji
 scrot
-thunar-archive-plugin
-thunar-media-tags-plugin
-thunar-volman
 tumbler
 viewnior
 w3m
