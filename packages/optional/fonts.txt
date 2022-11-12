@@ -1,0 +1,15 @@
+awesome-terminal-fonts
+font-manager
+nerd-fonts-fantasque-sans-mono
+nerd-fonts-fira-code
+noto-fonts-emoji
+powerline-fonts
+terminus-font
+ttc-iosevka
+ttf-droid
+ttf-fantasque-sans-mono
+ttf-fira-code
+ttf-hack
+ttf-iosevka-nerd
+ttf-liberation
+ttf-roboto

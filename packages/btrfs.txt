@@ -1,0 +1,5 @@
+btrfsmaintenance
+snap-pac
+snapper
+--END OF MINIMAL INSTALL--
+btrfs-assistant-git

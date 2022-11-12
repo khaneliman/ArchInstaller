@@ -118,7 +118,7 @@ display_manager() {
     elif [[ "${DESKTOP_ENV}" == "lxde" ]]; then
         systemctl enable lxdm.service
 
-    elif [[ "${DESKTOP_ENV}" == "openbox" || "${DESKTOP_ENV}" == "awesome" ]]; then
+    elif [[ "${DESKTOP_ENV}" == "openbox" ]]; then
         systemctl enable lightdm.service
         if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
             echo -e "Setting LightDM Theme..."
@@ -127,10 +127,17 @@ display_manager() {
             # Set default lightdm greeter to lightdm-webkit2-greeter
             sed -i 's/#greeter-session=example.*/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
         fi
+    elif [[ "${DESKTOP_ENV}" == "awesome" ]]; then
+        systemctl enable lightdm.service
+        if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
+            echo -e "Setting LightDM Theme..."
+            cp ~/archinstaller/configs/awesome/etc/lightdm/slick-greeter.conf /etc/lightdm/slick-greeter.conf
+            sed -i 's/#greeter-session=example.*/greeter-session=lightdm-slick-greeter/g' /etc/lightdm/lightdm.conf
+        fi
     # If none of the above, use lightdm as fallback
     else
         if [[ ! "${INSTALL_TYPE}" == "SERVER" ]]; then
-            sudo pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
+            pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
             systemctl enable lightdm.service
         fi
     fi
@@ -223,16 +230,16 @@ grub_config() {
     # set kernel parameter for adding splash screen
     sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 
-    echo -e "Installing CyberRe Grub theme..."
+    echo -e "Installing Vimix Grub theme..."
     THEME_DIR="/boot/grub/themes"
-    THEME_NAME=CyberRe
+    THEME_NAME=Vimix
 
     echo -e "\n Creating the theme directory..."
     mkdir -p "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Copying the theme..."
     cd "${HOME}"/archinstaller || return
-    cp -a configs"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
+    cp -a configs/base"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Backing up Grub config..."
     cp -an /etc/default/grub /etc/default/grub.bak
@@ -309,7 +316,7 @@ plymouth_config() {
                 Enabling (and Theming) Plymouth Boot Splash
   -------------------------------------------------------------------------
   "
-    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/usr/share/plymouth/themes
+    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/base/usr/share/plymouth/themes
     PLYMOUTH_THEME="arch-glow" # can grab from config later if we allow selection
     mkdir -p "/usr/share/plymouth/themes"
 
@@ -336,11 +343,11 @@ snapper_config() {
   -------------------------------------------------------------------------
   "
 
-    SNAPPER_CONF="$HOME"/archinstaller/configs/etc/snapper/configs/root
+    SNAPPER_CONF="$HOME"/archinstaller/configs/base/etc/snapper/configs/root
     mkdir -p /etc/snapper/configs/
     cp -rfv "${SNAPPER_CONF}" /etc/snapper/configs/
 
-    SNAPPER_CONF_D="$HOME"/archinstaller/configs/etc/conf.d/snapper
+    SNAPPER_CONF_D="$HOME"/archinstaller/configs/base/etc/conf.d/snapper
     mkdir -p /etc/conf.d/
     cp -rfv "${SNAPPER_CONF_D}" /etc/conf.d/
 }

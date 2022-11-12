@@ -1,0 +1,12 @@
+[submodule "awesome-wm-widgets"]
+    path = configs/awesome/home/.config/awesome/awesome-wm-widgets
+    url = https://github.com/streetturtle/awesome-wm-widgets.git
+[submodule "bling"]
+    path = configs/awesome/home/.config/awesome/bling
+    url = https://github.com/BlingCorp/bling.git
+[submodule "smart_borders"]
+    path = configs/awesome/home/.config/awesome/smart_borders
+    url = https://github.com/intrntbrn/smart_borders.git
+[submodule "net_widgets"]
+    path = configs/awesome/home/.config/awesome/widget/net_widgets
+    url = https://github.com/pltanton/net_widgets.git

@@ -1,0 +1,17 @@
+--END OF MINIMAL INSTALL--
+autojump
+bottles
+davmail
+dxvk-bin
+github-desktop
+heroic-games-launcher-bin
+mangohud
+mangohud-common
+mkinitcpio-firmware
+mkinitcpio-nfs-utils
+needrestart
+pacman-cleanup-hook
+plymouth-git
+protonup-qt
+topgrade
+visual-studio-code-bin
