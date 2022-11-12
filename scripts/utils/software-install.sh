@@ -12,7 +12,7 @@ arch_install() {
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-    pacstrap /mnt base base-devel linux linux-firmware linux-zen micro sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+    pacstrap /mnt base base-devel linux linux-firmware linux-zen jq micro sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
 }
 
 # @description Installs software from the AUR

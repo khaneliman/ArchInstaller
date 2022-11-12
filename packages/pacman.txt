@@ -22,8 +22,6 @@ wireplumber
 alsa-plugins
 alsa-utils
 alacritty
-autoconf
-automake
 bash-completion
 bind
 bluez
@@ -61,12 +59,9 @@ gst-plugins-ugly
 i2c-tools
 jdk-openjdk
 kitty
-libtool
 lsof
 lutris
 lzop
-m4
-make
 mesa-utils
 meson
 nfs-utils
@@ -77,7 +72,6 @@ openssh
 os-prober
 p7zip
 patch
-pkgconf
 python-pip
 python-psutil
 python-pyqt5
@@ -103,7 +97,6 @@ vde2
 virt-manager
 virt-viewer
 vlc
-which
 wine-gecko
 wine-mono
 winetricks
