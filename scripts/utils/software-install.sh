@@ -164,14 +164,6 @@ essential_services() {
         systemctl enable ntpd.service
         echo -e "NTP enabled \n"
 
-        echo "Disabling DHCP"
-        systemctl disable dhcpcd.service
-        echo -e "DHCP disabled \n"
-
-        echo "Stopping DHCP"
-        systemctl stop dhcpcd.service
-        echo -e "DHCP stopped \n"
-
         echo "Enabling Bluetooth"
         systemctl enable bluetooth
         echo -e "Bluetooth enabled \n"

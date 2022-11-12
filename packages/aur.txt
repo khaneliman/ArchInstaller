@@ -1,9 +1,8 @@
 --END OF MINIMAL INSTALL--
-autojump
 bottles
 davmail
 dxvk-bin
-github-desktop
+github-desktop-bin
 heroic-games-launcher-bin
 mangohud
 mangohud-common

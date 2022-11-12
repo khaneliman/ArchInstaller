@@ -1,5 +1,6 @@
 gnome
 --END OF MINIMAL INSTALL--
+gparted
 gnome-extra
 gvfs
 gvfs-afc
@@ -9,3 +10,4 @@ gvfs-gphoto2
 gvfs-mtp
 gvfs-nfs
 gvfs-smb
+papirus-icon-theme
