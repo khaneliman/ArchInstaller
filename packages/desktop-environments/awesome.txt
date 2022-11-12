@@ -29,7 +29,6 @@ kvantum
 lxappearance
 lua-fifo
 network-manager-applet
-obconf
 parcellite
 pavucontrol
 playerctl
