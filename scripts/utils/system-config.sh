@@ -131,13 +131,13 @@ display_manager() {
         systemctl enable lightdm.service
         if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
             echo -e "Setting LightDM Theme..."
-            sudo cp ~/archinstaller/configs/awesome/etc/lightdm/slick-greeter.conf /etc/lightdm/slick-greeter.conf
+            cp ~/archinstaller/configs/awesome/etc/lightdm/slick-greeter.conf /etc/lightdm/slick-greeter.conf
             sed -i 's/#greeter-session=example.*/greeter-session=lightdm-slick-greeter/g' /etc/lightdm/lightdm.conf
         fi
     # If none of the above, use lightdm as fallback
     else
         if [[ ! "${INSTALL_TYPE}" == "SERVER" ]]; then
-            sudo pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
+            pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
             systemctl enable lightdm.service
         fi
     fi
