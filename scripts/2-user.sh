@@ -16,9 +16,9 @@ source $HOME/archinstaller/configs/setup.conf
 
 logo
 
-desktop_environment_install
-
 aur_helper_install
+
+desktop_environment_install
 
 btrfs_install
 

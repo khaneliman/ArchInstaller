@@ -1,9 +1,0 @@
---END OF MINIMAL INSTALL--
-awesome-git
-awmtt
-lightdm-settings
-lua-pam-git
-networkmanager-dmenu-git
-picom-git
-rofi-power-menu
-xidlehook

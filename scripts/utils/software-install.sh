@@ -123,16 +123,25 @@ desktop_environment_install() {
                     Installing Desktop Environment Software  
 -------------------------------------------------------------------------
 "
-    INSTALL_STRING="sudo pacman -S --noconfirm --needed --color=always "
-    sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".txt | (
-        while read line; do
-            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            INSTALL_STRING+=" $line"
-        done
+    # Install pacman packages with pacman - MINIMNAL
+    MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
+    # MINIMAL_AUR_FILTER=.minimal[].aur[].package
+    MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
+    # FULL_PACMAN_FILTER=.full[].pacman[].package
+    FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
+    # FULL_AUR_FILTER=.full[].aur[].package
+    FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
 
-        echo "Installing $DESKTOP_ENV"
-        eval "$INSTALL_STRING"
+    jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".json | (
+        while read line; do
+            echo "Installing $line"z
+
+            if [[ "$AUR_HELPER" != NONE ]]; then
+                "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+            else
+                pacman -S $line --noconfirm --needed --color=always
+            fi
+        done
     )
 }
 
