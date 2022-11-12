@@ -13,11 +13,7 @@ dolphin-emu
 dolphin-plugins
 elisa
 feh
-geany
 gnome-keyring
-gsimplecal
-gtk2-perl
-imagemagick
 iw
 iwd
 jq
@@ -29,7 +25,6 @@ kvantum
 lxappearance
 lua-fifo
 network-manager-applet
-parcellite
 pavucontrol
 playerctl
 polkit-kde-agent
@@ -41,9 +36,7 @@ rofi-emoji
 scrot
 tumbler
 viewnior
-w3m
 wireless_tools
-xautolock
 xcolor
 xdg-desktop-portal-kde
 xdg-user-dirs
