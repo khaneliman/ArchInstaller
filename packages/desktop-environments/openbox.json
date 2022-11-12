@@ -3,28 +3,27 @@
 		{
 			"pacman": [
 				{
+					"package": "openbox"
+				},
+				{
 					"package": "lightdm"
 				},
 				{
-					"package": "lightdm-slick-greeter"
+					"package": "lightdm-gtk-greeter"
 				},
 				{
 					"package": "lxsession"
+				},
+				{
+					"package": "thunar"
 				}
 			],
-			"aur": [
-				{
-					"package": "awesome-git"
-				}
-			]
+			"aur": []
 		}
 	],
 	"full": [
 		{
 			"pacman": [
-				{
-					"package": "ark"
-				},
 				{
 					"package": "blueman"
 				},
@@ -41,22 +40,7 @@
 					"package": "easyeffects"
 				},
 				{
-					"package": "dolphin"
-				},
-				{
-					"package": "dolphin-emu"
-				},
-				{
-					"package": "dolphin-plugins"
-				},
-				{
-					"package": "elisa"
-				},
-				{
 					"package": "feh"
-				},
-				{
-					"package": "gnome-keyring"
 				},
 				{
 					"package": "iw"
@@ -65,22 +49,7 @@
 					"package": "iwd"
 				},
 				{
-					"package": "kde-gtk-config"
-				},
-				{
-					"package": "kio-fuse"
-				},
-				{
-					"package": "kio-gdrive"
-				},
-				{
-					"package": "kvantum"
-				},
-				{
 					"package": "lxappearance"
-				},
-				{
-					"package": "lua-fifo"
 				},
 				{
 					"package": "network-manager-applet"
@@ -90,9 +59,6 @@
 				},
 				{
 					"package": "playerctl"
-				},
-				{
-					"package": "polkit-kde-agent"
 				},
 				{
 					"package": "qt5ct"
@@ -141,27 +107,53 @@
 				},
 				{
 					"package": "xsettingsd"
+				},
+				{
+					"package": "dunst"
+				},
+				{
+					"package": "gsimplecal"
+				},
+				{
+					"package": "gtk2-perl"
+				},
+				{
+					"package": "imagemagick"
+				},
+				{
+					"package": "lightdm-webkit-theme-litarvan"
+				},
+				{
+					"package": "lightdm-webkit2-greeter"
+				},
+				{
+					"package": "obconf"
+				},
+				{
+					"package": "parcellite"
+				},
+				{
+					"package": "thunar-archive-plugin"
+				},
+				{
+					"package": "thunar-media-tags-plugin"
+				},
+				{
+					"package": "thunar-volman"
+				},
+				{
+					"package": "tint2"
+				},
+				{
+					"package": "w3m"
 				}
 			],
 			"aur": [
-				
-				{
-					"package": "awmtt"
-				},
 				{
 					"package": "lightdm-settings"
 				},
 				{
-					"package": "lua-pam-git"
-				},
-				{
-					"package": "networkmanager-dmenu-git"
-				},
-				{
 					"package": "picom-git"
-				},
-				{
-					"package": "rofi-power-menu"
 				},
 				{
 					"package": "xidlehook"
