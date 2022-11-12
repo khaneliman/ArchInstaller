@@ -3,7 +3,6 @@ dosfstools
 linux-headers
 linux-zen-headers
 mesa
-noto-fonts-emoji
 usbutils
 xdg-user-dirs
 xorg
@@ -19,7 +18,6 @@ alsa-plugins
 alsa-utils
 autoconf
 automake
-awesome-terminal-fonts
 bash-completion
 bind
 bison
@@ -80,7 +78,6 @@ m4
 make
 mesa-utils
 meson
-micro
 nfs-utils
 ninja
 ntfs-3g
@@ -95,7 +92,6 @@ pipewire-alsa
 pipewire-jack
 pipewire-pulse
 pkgconf
-powerline-fonts
 python-notify2
 python-pip
 python-psutil
@@ -113,17 +109,8 @@ steam
 steam-native-runtime
 swtpm
 synergy
-terminus-font
 thunderbird
 traceroute
-ttc-iosevka
-ttf-droid
-ttf-fantasque-sans-mono
-ttf-fira-code
-ttf-hack
-ttf-iosevka-nerd
-ttf-liberation
-ttf-roboto
 ufw
 unrar
 unzip

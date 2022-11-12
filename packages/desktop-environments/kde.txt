@@ -1,8 +1,7 @@
+dolphin
 plasma-desktop
 sddm
-dolphin
 --END OF MINIMAL INSTALL--
-ark
 audiocd-kio
 bluedevil
 breeze
@@ -12,12 +11,14 @@ extra-cmake-modules
 filelight
 gwenview
 kate
-kde-gtk-config
 kcodecs
 kcoreaddons
+kde-gtk-config
 kdeplasma-addons
 kgamma5
 kgpg
+kio-fuse
+kio-gdrive
 kinfocenter
 konsole
 kscreen
