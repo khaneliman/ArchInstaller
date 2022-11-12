@@ -22,7 +22,7 @@ aur_helper() {
 desktop_environment() {
     # Let the user choose Desktop Enviroment from predefined list
     echo -ne "Please select your desired Desktop Enviroment:\n"
-    options=($(for f in packages/desktop-environments/*.txt; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done))
+    options=($(for f in packages/desktop-environments/*.json; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done))
     select_option $? 4 "${options[@]}"
     desktop_env="${options[$?]}"
     set_option DESKTOP_ENV "$desktop_env"
