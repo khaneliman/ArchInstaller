@@ -94,20 +94,24 @@ btrfs_install() {
 -------------------------------------------------------------------------
 "
     if [[ "$FS" == btrfs ]]; then
-        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
 
-        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-        # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/btrfs.txt | (
+        # Install pacman packages with pacman
+        jq --raw-output '.pacman[].package' "$HOME"/archinstaller/packages/btrfs.json | (
             while read line; do
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-                INSTALL_STRING+=" $line"
+                echo "Installing $line"
+                pacman -S --noconfirm --needed --color=always
             done
-
-            echo "Installing Btrfs Packages"
-            eval "$INSTALL_STRING"
         )
+
+        # If aur helper installed, install the aur packages
+        if [[ "$AUR_HELPER" != NONE ]]; then
+            jq --raw-output '.aur[].package' "$HOME"/archinstaller/packages/btrfs.json | (
+                while read line; do
+                    echo "Installing $line"
+                    "$AUR_HELPER" -S --noconfirm --needed --color=always
+                done
+            )
+        fi
     fi
 }
 

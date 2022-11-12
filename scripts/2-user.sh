@@ -20,6 +20,8 @@ desktop_environment_install
 
 aur_helper_install
 
+btrfs_install
+
 user_theming
 
 echo -ne "
