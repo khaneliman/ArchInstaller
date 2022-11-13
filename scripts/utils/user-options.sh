@@ -22,7 +22,7 @@ aur_helper() {
 desktop_environment() {
     # Let the user choose Desktop Enviroment from predefined list
     echo -ne "Please select your desired Desktop Enviroment:\n"
-    options=($(for f in packages/desktop-environments/*.json; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done))
+    mapfile -t options < <(for f in packages/desktop-environments/*.json; do echo "$f" | sed -r "s/.+\/(.+)\..+/\1/;/pkgs/d"; done)
     select_option $? 4 "${options[@]}"
     desktop_env="${options[$?]}"
     set_option DESKTOP_ENV "$desktop_env"
@@ -104,7 +104,7 @@ keymap() {
     echo -ne "
 Please select keyboard layout from this list"
     # These are default key maps as presented in official arch repo archinstall
-    options=(us by ca cf cz de dk es et fa fi fr gr hu il it lt lv mk nl no pl ro ru sg ua uk)
+    options=("us" "by" "ca" "cf" "cz" "de" "dk" "es" "et" "fa" "fi" "fr" "gr" "hu" "il" "it" "lt" "lv" "mk" "nl" "no" "pl" "ro" "ru" "sg" "ua" "uk")
 
     select_option $? 4 "${options[@]}"
     keymap="${options[$?]}"
@@ -174,7 +174,7 @@ System detected your timezone to be '$time_zone' \n"
         ;;
     n | N | no | NO | No)
         echo "Please enter your desired timezone e.g. Europe/London :"
-        read new_timezone
+        read -r new_timezone
         echo "${new_timezone} set as timezone"
         set_option TIMEZONE "$new_timezone"
         ;;
@@ -191,7 +191,7 @@ user_info() {
 
     # Loop through user input until the user gives a valid username
     while true; do
-        read -p "Please enter username:" username
+        read -rp "Please enter username:" username
         # username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
         # lowercase the username to test regex
         [[ "${username,,}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] && break
@@ -203,11 +203,11 @@ user_info() {
 
     # Loop through user input until the user gives a valid hostname, but allow the user to force save
     while true; do
-        read -p "Please name your machine:" nameofmachine
+        read -rp "Please name your machine:" nameofmachine
         # hostname regex (!!couldn't find spec for computer name!!)
         [[ "${nameofmachine,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]] && break
         # if validation fails allow the user to force saving of the hostname
-        read -p "Hostname doesn't seem correct. Do you still want to save it? (y/n)" force
+        read -rp "Hostname doesn't seem correct. Do you still want to save it? (y/n)" force
         [[ "${force,,}" = "y" ]] && break
     done
     set_option NAME_OF_MACHINE "$nameofmachine"

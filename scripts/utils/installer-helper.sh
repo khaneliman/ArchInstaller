@@ -23,7 +23,7 @@ end() {
 # @arg $2 string Previous command
 exit_on_error() {
     exit_code=$1
-    last_command=${@:2}
+    last_command=${*:2}
     if [ "$exit_code" -ne 0 ]; then
         echo >&2 "\"${last_command}\" command failed with exit code ${exit_code}."
         exit "$exit_code"
@@ -56,14 +56,18 @@ function multiselect {
 
     # little helpers for terminal print control and key input
     ESC=$(printf "\033")
-    cursor_blink_on() { printf "$ESC[?25h"; }
-    cursor_blink_off() { printf "$ESC[?25l"; }
-    cursor_to() { printf "$ESC[$1;${2:-1}H"; }
-    print_inactive() { printf "$2   $1 "; }
-    print_active() { printf "$2  $ESC[7m $1 $ESC[27m"; }
+    cursor_blink_on() { printf "%s[?25h" "$ESC"; }
+    cursor_blink_off() { printf "%s[?25l" "$ESC"; }
+    cursor_to() { printf "%s[$1;${2:-1}H" "$ESC"; }
+    print_inactive() { printf "%s   %s " "$2" "$1"; }
+    print_active() { printf "$2  %s[7m $1 %s[27m" "$ESC" "$ESC"; }
     get_cursor_row() {
-        IFS=';' read -sdR -p $'\E[6n' ROW COL
-        echo ${ROW#*[}
+        IFS=';' read -rsdR -p $'\E[6n' ROW COL
+        echo "${ROW#*[}"
+    }
+    get_cursor_col() {
+        IFS=';' read -rsdR -p $'\E[6n' ROW COL
+        echo "${COL#*[}"
     }
     key_input() {
         local key
@@ -85,7 +89,7 @@ function multiselect {
         else
             arr[option]=true
         fi
-        eval $arr_name='("${arr[@]}")'
+        eval "$arr_name"='("${arr[@]}")'
     }
 
     local retval=$1
@@ -107,7 +111,7 @@ function multiselect {
 
     # determine current screen position for overwriting the options
     local lastrow=$(get_cursor_row)
-    local startrow=$(($lastrow - ${#options[@]}))
+    local startrow=$((lastrow - ${#options[@]}))
 
     # ensure cursor and input echoing back on upon a ctrl+c during read -s
     trap "cursor_blink_on; stty echo; printf '\n'; exit" 2
@@ -123,7 +127,7 @@ function multiselect {
                 prefix="[x]"
             fi
 
-            cursor_to $(($startrow + $idx))
+            cursor_to $((startrow + idx))
             if [ $idx -eq $active ]; then
                 print_active "$option" "$prefix"
             else
@@ -148,11 +152,11 @@ function multiselect {
     done
 
     # cursor position back to normal
-    cursor_to $lastrow
+    cursor_to "$lastrow"
     printf "\n"
     cursor_blink_on
 
-    eval $retval='("${selected[@]}")'
+    eval "$retval"='("${selected[@]}")'
 }
 
 # @description Sequence to call scripts
@@ -171,7 +175,7 @@ sequence() {
 # @arg $2 string Configuration value.
 set_option() {
     grep -Eq "^${1}.*" "$CONFIG_FILE" && sed -i "/^${1}.*/d" "$CONFIG_FILE" # delete option if exists
-    echo "${1}=${2}" >>$CONFIG_FILE                                         # add option
+    echo "${1}=${2}" >>"$CONFIG_FILE"                                       # add option
 }
 
 # Renders a text based list of options that can be selected by the
@@ -184,18 +188,18 @@ select_option() {
 
     # little helpers for terminal print control and key input
     ESC=$(printf "\033")
-    cursor_blink_on() { printf "$ESC[?25h"; }
-    cursor_blink_off() { printf "$ESC[?25l"; }
-    cursor_to() { printf "$ESC[$1;${2:-1}H"; }
-    print_option() { printf "$2   $1 "; }
-    print_selected() { printf "$2  $ESC[7m $1 $ESC[27m"; }
+    cursor_blink_on() { printf "%s[?25h" "$ESC"; }
+    cursor_blink_off() { printf "%s[?25l" "$ESC"; }
+    cursor_to() { printf "%s[$1;${2:-1}H" "$ESC"; }
+    print_option() { printf "%s   %s " "$2" "$1"; }
+    print_selected() { printf "$2  %s[7m $1 %s[27m" "$ESC" "$ESC"; }
     get_cursor_row() {
-        IFS=';' read -sdR -p $'\E[6n' ROW COL
-        echo ${ROW#*[}
+        IFS=';' read -rsdR -p $'\E[6n' ROW COL
+        echo "${ROW#*[}"
     }
     get_cursor_col() {
-        IFS=';' read -sdR -p $'\E[6n' ROW COL
-        echo ${COL#*[}
+        IFS=';' read -rsdR -p $'\E[6n' ROW COL
+        echo "${COL#*[}"
     }
     key_input() {
         local key
@@ -226,15 +230,19 @@ select_option() {
         local row=0
         local col=0
 
-        curr_idx=$(($curr_col + $curr_row * $colmax))
+        curr_idx=$((curr_col + curr_row * colmax))
 
         for option in "${options[@]}"; do
 
-            row=$(($idx / $colmax))
-            col=$(($idx - $row * $colmax))
+            row=$((idx / colmax))
+            col=$((idx - row * colmax))
 
-            cursor_to $(($startrow + $row + 1)) $(($offset * $col + 1))
-            [ $idx -eq $curr_idx ] && print_selected "$option" || print_option "$option"
+            cursor_to $((startrow + row + 1)) $((offset * col + 1))
+            if [ "$idx" -eq "$curr_idx" ]; then
+                print_selected "$option"
+            else
+                print_option "$option"
+            fi
             ((idx++))
         done
     }
@@ -246,12 +254,12 @@ select_option() {
     local return_value=$1
     local lastrow=$(get_cursor_row)
     local lastcol=$(get_cursor_col)
-    local startrow=$(($lastrow - $#))
+    local startrow=$((lastrow - $#))
     local startcol=1
     local lines=$(tput lines)
     local cols=$(tput cols)
     local colmax=$2
-    local offset=$(($cols / $colmax))
+    local offset=$((cols / colmax))
 
     local size=$4
     shift 4
@@ -273,25 +281,25 @@ select_option() {
             ;;
         down)
             ((active_row++))
-            [ $active_row -ge $((${#options[@]} / $colmax)) ] && active_row=$((${#options[@]} / $colmax))
+            [ $active_row -ge $((${#options[@]} / colmax)) ] && active_row=$((${#options[@]} / colmax))
             ;;
         left)
-            ((active_col = $active_col - 1))
+            ((active_col--))
             [ $active_col -lt 0 ] && active_col=0
             ;;
         right)
-            ((active_col = $active_col + 1))
-            [ $active_col -ge $colmax ] && active_col=$(($colmax - 1))
+            ((active_col++))
+            [ $active_col -ge "$colmax" ] && active_col=$((colmax - 1))
             ;;
         esac
     done
 
     # cursor position back to normal
-    cursor_to $lastrow
+    cursor_to "$lastrow"
     printf "\n"
     cursor_blink_on
 
-    return $(($active_col + $active_row * $colmax))
+    return $((active_col + active_row * colmax))
 }
 
 # @description Sources file to be used by the script

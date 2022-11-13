@@ -6,6 +6,8 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Pacstrap arch linux to install location
+# @noargs
 arch_install() {
     echo -ne "
 -------------------------------------------------------------------------
@@ -24,21 +26,20 @@ aur_helper_install() {
 -------------------------------------------------------------------------
 "
     if [[ ! "$AUR_HELPER" == none ]]; then
-
         # Install the aur helper selected
         git clone https://aur.archlinux.org/"$AUR_HELPER".git ~/"$AUR_HELPER"
         cd ~/"$AUR_HELPER" || return
         makepkg -si --noconfirm
 
-        # MINIMAL_AUR_FILTER=.minimal[].aur[].package
-        MINIMAL_AUR_FILTER=.minimal[].aur[].package
-        # FULL_AUR_FILTER=.full[].aur[].package
+        # JQ Filters
+        MINIMAL_AUR_FILTER=".minimal[].aur[].package"
         FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
 
+        # Parse file with JQ to determine packages to install
         jq --raw-output "${MINIMAL_AUR_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/base.json | (
-            while read line; do
+            while read -r line; do
                 echo "Installing $line"
-                "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
             done
         )
     fi
@@ -52,19 +53,16 @@ base_install() {
                     Installing Base System  
 -------------------------------------------------------------------------
 "
-    # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-    # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        # Install pacman packages with pacman - MINIMNAL
-        MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
-        # FULL_PACMAN_FILTER=.full[].pacman[].package
+        # JQ Filters
+        MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
         FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
-        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
 
+        # Parse file with JQ to determine packages to install
         jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" ~/archinstaller/packages/base.json | (
-            while read line; do
-                echo "Installing $line"z
-                pacman -S $line --noconfirm --needed --color=always
+            while read -r line; do
+                echo "Installing $line"
+                pacman -S "$line" --noconfirm --needed --color=always
             done
         )
     fi
@@ -95,23 +93,21 @@ btrfs_install() {
 -------------------------------------------------------------------------
 "
     if [[ "$FS" == btrfs ]]; then
-        # Install pacman packages with pacman - MINIMNAL
-        MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
-        # MINIMAL_AUR_FILTER=.minimal[].aur[].package
+        # JQ filters
+        MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
         MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
-        # FULL_PACMAN_FILTER=.full[].pacman[].package
         FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
-        # FULL_AUR_FILTER=.full[].aur[].package
         FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
 
+        # Parse file with JQ to determine packages to install
         jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
-            while read line; do
-                echo "Installing $line"z
+            while read -r line; do
+                echo "Installing $line"
 
                 if [[ "$AUR_HELPER" != NONE ]]; then
-                    "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+                    "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
                 else
-                    pacman -S $line --noconfirm --needed --color=always
+                    pacman -S "$line" --noconfirm --needed --color=always
                 fi
             done
         )
@@ -126,23 +122,21 @@ desktop_environment_install() {
                     Installing Desktop Environment Software  
 -------------------------------------------------------------------------
 "
-    # Install pacman packages with pacman - MINIMNAL
-    MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
-    # MINIMAL_AUR_FILTER=.minimal[].aur[].package
+    # JQ filters
+    MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
     MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
-    # FULL_PACMAN_FILTER=.full[].pacman[].package
     FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
-    # FULL_AUR_FILTER=.full[].aur[].package
     FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
 
+    # Parse file with JQ to determine packages to install
     jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".json | (
-        while read line; do
-            echo "Installing $line"z
+        while read -r line; do
+            echo "Installing $line"
 
             if [[ "$AUR_HELPER" != NONE ]]; then
-                "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
             else
-                pacman -S $line --noconfirm --needed --color=always
+                pacman -S "$line" --noconfirm --needed --color=always
             fi
         done
     )
@@ -258,13 +252,6 @@ user_theming() {
                     Theming Desktop Environment  
 -------------------------------------------------------------------------
 "
-    # cd ~
-    # mkdir "$HOME/.cache"
-    # touch "$HOME/.cache/zshhistory"
-    # git clone "https://github.com/ChrisTitusTech/zsh"
-    # git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-    # ln -s "$HOME/zsh/.zshrc" ~/.zshrc
-
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
         if [[ "$DESKTOP_ENV" == "kde" ]]; then

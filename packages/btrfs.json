@@ -1,10 +1,4 @@
 {
-    "pacman": [
-        { "package": "snap-pac"},
-        { "package": "snapper"}
-            ],
-    "aur": [
-        { "package": "btrfsmaintenance"},
-        { "package": "btrfs-assistant-git"}
-    ]
+	"pacman": [{ "package": "snap-pac" }, { "package": "snapper" }],
+	"aur": [{ "package": "btrfsmaintenance" }, { "package": "btrfs-assistant-git" }]
 }
