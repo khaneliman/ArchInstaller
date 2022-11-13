@@ -14,7 +14,7 @@ arch_install() {
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-    pacstrap /mnt base base-devel linux linux-firmware linux-zen jq micro sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+    pacstrap /mnt base base-devel linux linux-firmware linux-zen jq micro wget libnewt --noconfirm --needed --color=always
 }
 
 # @description Installs software from the AUR
@@ -32,8 +32,8 @@ aur_helper_install() {
         makepkg -si --noconfirm
 
         # JQ Filters
-        MINIMAL_AUR_FILTER=".minimal[].aur[].package"
-        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
+        MINIMAL_AUR_FILTER=".minimal.aur[].package"
+        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
 
         # Parse file with JQ to determine packages to install
         jq --raw-output "${MINIMAL_AUR_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/base.json | (
@@ -55,11 +55,11 @@ base_install() {
 "
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
         # JQ Filters
-        MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
-        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
+        MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
 
         # Parse file with JQ to determine packages to install
-        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" ~/archinstaller/packages/base.json | (
+        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" "$HOME"/archinstaller/packages/base.json | (
             while read -r line; do
                 echo "Installing $line"
                 pacman -S "$line" --noconfirm --needed --color=always
@@ -94,13 +94,11 @@ btrfs_install() {
 "
     if [[ "$FS" == btrfs ]]; then
         # JQ filters
-        MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
-        MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
-        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
-        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
+        PACMAN_FILTER=".pacman[].package"
+        AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .aur[].package" || echo "")
 
         # Parse file with JQ to determine packages to install
-        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
+        jq --raw-output "${PACMAN_FILTER}""${AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
             while read -r line; do
                 echo "Installing $line"
 
@@ -123,10 +121,10 @@ desktop_environment_install() {
 -------------------------------------------------------------------------
 "
     # JQ filters
-    MINIMAL_PACMAN_FILTER=".minimal[].pacman[].package"
-    MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
-    FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
-    FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
+    MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+    MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal.aur[].package" || echo "")
+    FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
+    FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
 
     # Parse file with JQ to determine packages to install
     jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".json | (
@@ -266,7 +264,7 @@ user_theming() {
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
             cd ~/archinstaller/ && git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
-            sudo cp -r ~/archinstaller/configs/base/etc/xdg/awesome /etc/xdg/awesome
+            sudo cp -r ~/archinstaller/configs/awesome/etc/xdg/awesome /etc/xdg/awesome
             sudo mkdir -p /usr/share/wallpapers/
             sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
         else

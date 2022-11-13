@@ -1,18 +1,14 @@
 {
-	"minimal": [
-		{
-			"pacman": [
-				{
-					"package": "lxde"
-				}
-			],
-			"aur": []
-		}
-	],
-	"full": [
-		{
-			"pacman": [],
-			"aur": []
-		}
-	]
+	"minimal": {
+		"pacman": [
+			{
+				"package": "lxde"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [],
+		"aur": []
+	}
 }

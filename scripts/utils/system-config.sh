@@ -34,25 +34,6 @@ add_user() {
     fi
 }
 
-# @description Adds multilib and chaotic-aur repo to get precompiled aur packages
-# @noargs
-extra_repos() {
-
-    #Enable multilib
-    sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
-
-    #Enable chaotic-aur
-    pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-    pacman-key --lsign-key FBA220DFC880C036
-    pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-
-    echo '' | sudo tee -a /etc/pacman.conf
-    echo '[chaotic-aur]' | sudo tee -a /etc/pacman.conf
-    echo 'Include = /etc/pacman.d/chaotic-mirrorlist ' | sudo tee -a /etc/pacman.conf
-
-    pacman -Sy --noconfirm --needed --color=always
-}
-
 # @description Configures makepkg settings dependent on cpu cores
 # @noargs
 cpu_config() {
@@ -191,6 +172,34 @@ do_btrfs() {
         echo -e "\n Mounting $z at /$MOUNTPOINT/$w"
         mount -o "$MOUNT_OPTIONS",subvol="${z}" "$2" "$MOUNTPOINT"/"${w}"
     done
+}
+
+# @description Adds multilib and chaotic-aur repo to get precompiled aur packages
+# @noargs
+extra_repos() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Adding additional repos
+-------------------------------------------------------------------------
+"
+
+    echo -e "\n Enabling multilib"
+    #Enable multilib
+    sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+
+    echo -e "\n Importing chaotic aur keyring"
+    #Enable chaotic-aur
+    pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+    pacman-key --lsign-key FBA220DFC880C036
+    pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+
+    echo -e "\n Adding chaotic aur to pacman.conf"
+    echo '' | sudo tee -a /etc/pacman.conf
+    echo '[chaotic-aur]' | sudo tee -a /etc/pacman.conf
+    echo 'Include = /etc/pacman.d/chaotic-mirrorlist ' | sudo tee -a /etc/pacman.conf
+
+    echo -e "\n Syncing repos"
+    pacman -Sy --noconfirm --needed --color=always
 }
 
 # @description Format disk before creatign filesystem

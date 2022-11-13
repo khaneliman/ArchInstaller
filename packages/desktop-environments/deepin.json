@@ -1,21 +1,17 @@
 {
-	"minimal": [
-		{
-			"pacman": [
-				{
-					"package": "deepin"
-				},
-				{
-					"package": "deepin-extra"
-				}
-			],
-			"aur": []
-		}
-	],
-	"full": [
-		{
-			"pacman": [],
-			"aur": []
-		}
-	]
+	"minimal": {
+		"pacman": [
+			{
+				"package": "deepin"
+			},
+			{
+				"package": "deepin-extra"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [],
+		"aur": []
+	}
 }
