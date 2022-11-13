@@ -8,6 +8,7 @@ Contains the functions used to modify the system
 * [create_filesystems()](#create_filesystems)
 * [display_manager()](#display_manager)
 * [do_btrfs()](#do_btrfs)
+* [extra_repos()](#extra_repos)
 * [format_disk()](#format_disk)
 * [grub_config()](#grub_config)
 * [locale_config()](#locale_config)
@@ -52,6 +53,12 @@ _Function has no arguments._
 ## do_btrfs()
 
 Perform the btrfs filesystem configuration
+
+_Function has no arguments._
+
+## extra_repos()
+
+Adds multilib and chaotic-aur repo to get precompiled aur packages
 
 _Function has no arguments._
 

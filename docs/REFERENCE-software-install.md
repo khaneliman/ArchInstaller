@@ -7,6 +7,7 @@ Contains the functions to install software
 * [aur_helper_install()](#aur_helper_install)
 * [base_install()](#base_install)
 * [bootloader_install()](#bootloader_install)
+* [btrfs_install()](#btrfs_install)
 * [desktop_environment_install()](#desktop_environment_install)
 * [essential_services()](#essential_services)
 * [graphics_install()](#graphics_install)
@@ -17,6 +18,8 @@ Contains the functions to install software
 
 ## arch_install()
 
+Pacstrap arch linux to install location
+
 ### Output on stdout
 
 * Output routed to install.log
@@ -24,6 +27,8 @@ Contains the functions to install software
 ### Output on stderr
 
 * # @stderror Output routed to install.log
+
+_Function has no arguments._
 
 ## aur_helper_install()
 
@@ -40,6 +45,12 @@ _Function has no arguments._
 ## bootloader_install()
 
 Install bootloader
+
+_Function has no arguments._
+
+## btrfs_install()
+
+Installs btrfs packages
 
 _Function has no arguments._
 

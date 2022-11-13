@@ -6,6 +6,7 @@ Contains the functions used to facilitate the installer
 * [end()](#end)
 * [exit_on_error()](#exit_on_error)
 * [logo()](#logo)
+* [function multiselect {](#function-multiselect-)
 * [sequence()](#sequence)
 * [set_option()](#set_option)
 * [source_file()](#source_file)
@@ -40,6 +41,12 @@ Exits script if previous command fails
 ## logo()
 
 Displays archinstaller logo
+
+_Function has no arguments._
+
+## function multiselect {
+
+Select multiple options
 
 _Function has no arguments._
 
