@@ -1,0 +1,14 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "lxde"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [],
+		"aur": []
+	}
+}

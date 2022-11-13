@@ -6,13 +6,15 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Pacstrap arch linux to install location
+# @noargs
 arch_install() {
     echo -ne "
 -------------------------------------------------------------------------
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-    pacstrap /mnt base base-devel linux linux-firmware linux-zen micro sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+    pacstrap /mnt base base-devel linux linux-firmware linux-zen jq micro wget libnewt --noconfirm --needed --color=always
 }
 
 # @description Installs software from the AUR
@@ -24,22 +26,22 @@ aur_helper_install() {
 -------------------------------------------------------------------------
 "
     if [[ ! "$AUR_HELPER" == none ]]; then
+        # Install the aur helper selected
         git clone https://aur.archlinux.org/"$AUR_HELPER".git ~/"$AUR_HELPER"
         cd ~/"$AUR_HELPER" || return
         makepkg -si --noconfirm
-        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-        # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/aur.txt | while read line; do
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
-        done
 
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/aur/"$DESKTOP_ENV".txt | while read line; do
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
-        done
+        # JQ Filters
+        MINIMAL_AUR_FILTER=".minimal.aur[].package"
+        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
+
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${MINIMAL_AUR_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/base.json | (
+            while read -r line; do
+                echo "Installing $line"
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+            done
+        )
     fi
 }
 
@@ -51,20 +53,17 @@ base_install() {
                     Installing Base System  
 -------------------------------------------------------------------------
 "
-    # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-    # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
+        # JQ Filters
+        MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
 
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/pacman.txt | (
-            while read line; do
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-                pacman -S --noconfirm --needed --color=always "$line"
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" "$HOME"/archinstaller/packages/base.json | (
+            while read -r line; do
+                echo "Installing $line"
+                pacman -S "$line" --noconfirm --needed --color=always
             done
-
-            echo "Installing base packages"
-            eval "$INSTALL_STRING"
         )
     fi
 }
@@ -94,19 +93,21 @@ btrfs_install() {
 -------------------------------------------------------------------------
 "
     if [[ "$FS" == btrfs ]]; then
-        INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
+        # JQ filters
+        PACMAN_FILTER=".pacman[].package"
+        AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .aur[].package" || echo "")
 
-        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-        # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/btrfs.txt | (
-            while read line; do
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-                INSTALL_STRING+=" $line"
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${PACMAN_FILTER}""${AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
+            while read -r line; do
+                echo "Installing $line"
+
+                if [[ "$AUR_HELPER" != NONE ]]; then
+                    "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+                else
+                    pacman -S "$line" --noconfirm --needed --color=always
+                fi
             done
-
-            echo "Installing Btrfs Packages"
-            eval "$INSTALL_STRING"
         )
     fi
 }
@@ -119,16 +120,23 @@ desktop_environment_install() {
                     Installing Desktop Environment Software  
 -------------------------------------------------------------------------
 "
-    INSTALL_STRING="sudo pacman -S --noconfirm --needed --color=always "
-    sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".txt | (
-        while read line; do
-            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            INSTALL_STRING+=" $line"
-        done
+    # JQ filters
+    MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+    MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal.aur[].package" || echo "")
+    FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
+    FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
 
-        echo "Installing $DESKTOP_ENV"
-        eval "$INSTALL_STRING"
+    # Parse file with JQ to determine packages to install
+    jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".json | (
+        while read -r line; do
+            echo "Installing $line"
+
+            if [[ "$AUR_HELPER" != NONE ]]; then
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+            else
+                pacman -S "$line" --noconfirm --needed --color=always
+            fi
+        done
     )
 }
 
@@ -242,13 +250,6 @@ user_theming() {
                     Theming Desktop Environment  
 -------------------------------------------------------------------------
 "
-    # cd ~
-    # mkdir "$HOME/.cache"
-    # touch "$HOME/.cache/zshhistory"
-    # git clone "https://github.com/ChrisTitusTech/zsh"
-    # git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-    # ln -s "$HOME/zsh/.zshrc" ~/.zshrc
-
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
         if [[ "$DESKTOP_ENV" == "kde" ]]; then
@@ -263,7 +264,7 @@ user_theming() {
         elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
             cd ~/archinstaller/ && git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
-            sudo cp -r ~/archinstaller/configs/base/etc/xdg/awesome /etc/xdg/awesome
+            sudo cp -r ~/archinstaller/configs/awesome/etc/xdg/awesome /etc/xdg/awesome
             sudo mkdir -p /usr/share/wallpapers/
             sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
         else

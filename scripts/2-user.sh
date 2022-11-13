@@ -12,13 +12,15 @@ for filename in "$HOME"/archinstaller/scripts/utils/*.sh; do
   # shellcheck source=./utils/*.sh
   source "$filename"
 done
-source $HOME/archinstaller/configs/setup.conf
+source "$HOME"/archinstaller/configs/setup.conf
 
 logo
 
+aur_helper_install
+
 desktop_environment_install
 
-aur_helper_install
+btrfs_install
 
 user_theming
 

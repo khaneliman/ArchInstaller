@@ -1,0 +1,20 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "budgie-desktop"
+			},
+			{
+				"package": "gnome"
+			},
+			{
+				"package": "lxsession"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [],
+		"aur": []
+	}
+}

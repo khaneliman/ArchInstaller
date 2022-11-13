@@ -1,0 +1,51 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "gnome"
+			},
+			{
+				"package": "deepin-extra"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [
+			{
+				"package": "gparted"
+			},
+			{
+				"package": "gnome-extra"
+			},
+			{
+				"package": "gvfs"
+			},
+			{
+				"package": "gvfs-afc"
+			},
+			{
+				"package": "gvfs-goa"
+			},
+			{
+				"package": "gvfs-google"
+			},
+			{
+				"package": "gvfs-gphoto2"
+			},
+			{
+				"package": "gvfs-mtp"
+			},
+			{
+				"package": "gvfs-nfs"
+			},
+			{
+				"package": "gvfs-smb"
+			},
+			{
+				"package": "papirus-icon-theme"
+			}
+		],
+		"aur": []
+	}
+}

@@ -1,0 +1,157 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "plasma-desktop"
+			},
+			{
+				"package": "sddm"
+			},
+			{
+				"package": "kde-system-meta"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [
+			{
+				"package": "kde-utilities-meta"
+			},
+			{
+				"package": "kde-network-meta"
+			},
+			{
+				"package": "kde-multimedia-meta"
+			},
+			{
+				"package": "kde-graphics-meta"
+			},
+			{
+				"package": "kde-pim-meta"
+			},
+			{
+				"package": "breeze"
+			},
+			{
+				"package": "breeze-gtk"
+			},
+			{
+				"package": "breeze-icons"
+			},
+			{
+				"package": "discover"
+			},
+			{
+				"package": "dolphin-emu"
+			},
+			{
+				"package": "dolphin-plugins"
+			},
+			{
+				"package": "kcodecs"
+			},
+			{
+				"package": "kcoreaddons"
+			},
+			{
+				"package": "kde-gtk-config"
+			},
+			{
+				"package": "kdeplasma-addons"
+			},
+			{
+				"package": "kio-fuse"
+			},
+			{
+				"package": "kvantum"
+			},
+			{
+				"package": "kgamma5"
+			},
+			{
+				"package": "kinfocenter"
+			},
+			{
+				"package": "kscreen"
+			},
+			{
+				"package": "polkit-kde-agent"
+			},
+			{
+				"package": "qt5ct"
+			},
+			{
+				"package": "qt6ct"
+			},
+			{
+				"package": "kvantum-qt5"
+			},
+			{
+				"package": "kwayland-integration"
+			},
+			{
+				"package": "layer-shell-qt"
+			},
+			{
+				"package": "oxygen"
+			},
+			{
+				"package": "plasma-nm"
+			},
+			{
+				"package": "plasma-pa"
+			},
+			{
+				"package": "plasma-wayland-session"
+			},
+			{
+				"package": "powerdevil"
+			},
+			{
+				"package": "print-manager"
+			},
+			{
+				"package": "systemsettings"
+			},
+			{
+				"package": "xdg-desktop-portal-kde"
+			},
+			{
+				"package": "zeroconf-ioslave"
+			}
+		],
+		"aur": [
+			{
+				"package": "lightly-git"
+			},
+			{
+				"package": "lightlyshaders-git"
+			},
+			{
+				"package": "nordic-darker-standard-buttons-theme"
+			},
+			{
+				"package": "nordic-darker-theme"
+			},
+			{
+				"package": "nordic-kde-git"
+			},
+			{
+				"package": "nordic-theme"
+			},
+			{
+				"package": "sddm-nordic-theme-git"
+			},
+			{
+				"package": "ttf-meslo"
+			},
+			{
+				"package": "ttf-meslo-nerd-font-powerlevel10k"
+			},
+			{
+				"package": "ttf-oswald"
+			}
+		]
+	}
+}
