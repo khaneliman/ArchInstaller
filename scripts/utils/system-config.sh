@@ -14,7 +14,7 @@ add_user() {
                     Adding User
 -------------------------------------------------------------------------
 "
-    if [ $(whoami) = "root" ]; then
+    if [ "$(whoami)" = "root" ]; then
         groupadd libvirt
         useradd -m -G wheel,libvirt -s /bin/bash "$USERNAME"
         echo "$USERNAME created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
@@ -40,12 +40,12 @@ cpu_config() {
     nc=$(grep -c ^processor /proc/cpuinfo)
     echo -ne "
 -------------------------------------------------------------------------
-                    You have " $nc" cores. And
-			changing the makeflags for "$nc" cores. Aswell as
+                    You have $nc cores. And
+			changing the makeflags for $nc cores. Aswell as
 				changing the compression settings.
 -------------------------------------------------------------------------
 "
-    TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
+    TOTAL_MEM=$(grep </proc/meminfo -i 'memtotal' | grep -o '[[:digit:]]*')
     if [[ "$TOTAL_MEM" -gt 8000000 ]]; then
         sed -i "s/^#\(MAKEFLAGS=\"-j\)2\"/\1$nc\"/;
         /^COMPRESSXZ=(xz -c -z -)/s/-c /&-T $nc /" /etc/makepkg.conf
@@ -90,7 +90,7 @@ create_filesystems() {
         do_btrfs "ROOT" "${partition3}"
 
         # store uuid of encrypted partition for grub
-        echo ENCRYPTED_PARTITION_UUID=$(blkid -s UUID -o value "${partition3}") >>"$CONFIGS_DIR"/setup.conf
+        echo ENCRYPTED_PARTITION_UUID="$(blkid -s UUID -o value "${partition3}")" >>"$CONFIGS_DIR"/setup.conf
     fi
 
     set +e
@@ -108,8 +108,8 @@ display_manager() {
         systemctl enable sddm.service
         if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
             echo -e "Setting SDDM Theme..."
-            echo [Theme] >>/etc/sddm.conf
-            echo Current=Nordic >>/etc/sddm.conf
+            echo "[Theme]" >>/etc/sddm.conf
+            echo "Current=Nordic" >>/etc/sddm.conf
         fi
 
     elif [[ "${DESKTOP_ENV}" == "gnome" ]]; then
@@ -118,7 +118,7 @@ display_manager() {
     elif [[ "${DESKTOP_ENV}" == "lxde" ]]; then
         systemctl enable lxdm.service
 
-    elif [[ "${DESKTOP_ENV}" == "openbox" || "${DESKTOP_ENV}" == "awesome" ]]; then
+    elif [[ "${DESKTOP_ENV}" == "openbox" ]]; then
         systemctl enable lightdm.service
         if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
             echo -e "Setting LightDM Theme..."
@@ -127,10 +127,17 @@ display_manager() {
             # Set default lightdm greeter to lightdm-webkit2-greeter
             sed -i 's/#greeter-session=example.*/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
         fi
+    elif [[ "${DESKTOP_ENV}" == "awesome" ]]; then
+        systemctl enable lightdm.service
+        if [[ "${INSTALL_TYPE}" == "FULL" ]]; then
+            echo -e "Setting LightDM Theme..."
+            cp ~/archinstaller/configs/awesome/etc/lightdm/slick-greeter.conf /etc/lightdm/slick-greeter.conf
+            sed -i 's/#greeter-session=example.*/greeter-session=lightdm-slick-greeter/g' /etc/lightdm/lightdm.conf
+        fi
     # If none of the above, use lightdm as fallback
     else
         if [[ ! "${INSTALL_TYPE}" == "SERVER" ]]; then
-            sudo pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
+            pacman -S --noconfirm --needed --color=always lightdm lightdm-gtk-greeter
             systemctl enable lightdm.service
         fi
     fi
@@ -165,6 +172,34 @@ do_btrfs() {
         echo -e "\n Mounting $z at /$MOUNTPOINT/$w"
         mount -o "$MOUNT_OPTIONS",subvol="${z}" "$2" "$MOUNTPOINT"/"${w}"
     done
+}
+
+# @description Adds multilib and chaotic-aur repo to get precompiled aur packages
+# @noargs
+extra_repos() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Adding additional repos
+-------------------------------------------------------------------------
+"
+
+    echo -e "\n Enabling multilib"
+    #Enable multilib
+    sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+
+    echo -e "\n Importing chaotic aur keyring"
+    #Enable chaotic-aur
+    pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+    pacman-key --lsign-key FBA220DFC880C036
+    pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+
+    echo -e "\n Adding chaotic aur to pacman.conf"
+    echo '' | sudo tee -a /etc/pacman.conf
+    echo '[chaotic-aur]' | sudo tee -a /etc/pacman.conf
+    echo 'Include = /etc/pacman.d/chaotic-mirrorlist ' | sudo tee -a /etc/pacman.conf
+
+    echo -e "\n Syncing repos"
+    pacman -Sy --noconfirm --needed --color=always
 }
 
 # @description Format disk before creatign filesystem
@@ -223,22 +258,22 @@ grub_config() {
     # set kernel parameter for adding splash screen
     sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash /' /etc/default/grub
 
-    echo -e "Installing CyberRe Grub theme..."
+    echo -e "Installing Vimix Grub theme..."
     THEME_DIR="/boot/grub/themes"
-    THEME_NAME=CyberRe
+    THEME_NAME=Vimix
 
     echo -e "\n Creating the theme directory..."
     mkdir -p "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Copying the theme..."
     cd "${HOME}"/archinstaller || return
-    cp -a configs"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
+    cp -a configs/base"${THEME_DIR}"/"${THEME_NAME}"/* "${THEME_DIR}"/"${THEME_NAME}"
 
     echo -e "\n Backing up Grub config..."
     cp -an /etc/default/grub /etc/default/grub.bak
 
     echo -e "\n Setting the theme as the default..."
-    grep "GRUB_THEME=" /etc/default/grub 2>&1 >/dev/null && sed -i '/GRUB_THEME=/d' /etc/default/grub
+    grep "GRUB_THEME=" /etc/default/grub >/dev/null 2>&1 && sed -i '/GRUB_THEME=/d' /etc/default/grub
     echo "GRUB_THEME=\"${THEME_DIR}"/"${THEME_NAME}"/theme.txt\" >>/etc/default/grub
 
     echo -e "\n Updating grub..."
@@ -273,7 +308,7 @@ low_memory_config() {
                     Checking for low memory systems <8G
 -------------------------------------------------------------------------
 "
-    TOTAL_MEM=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
+    TOTAL_MEM=$(grep </proc/meminfo -i 'memtotal' | grep -o '[[:digit:]]*')
     if [[ "$TOTAL_MEM" -lt 8000000 ]]; then
         # Put swap into the actual system, not into RAM disk, otherwise there is no point in it, it'll cache RAM into RAM. So, /mnt/ everything.
         mkdir -p /mnt/opt/swap  # make a dir that we can apply NOCOW to to make it btrfs-friendly.
@@ -298,7 +333,7 @@ mirrorlist_update() {
                     Setting up mirrors for faster downloads
 -------------------------------------------------------------------------
 "
-    reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector -a 48 -c "$iso" -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 }
 
 # @description Install plymouth splash
@@ -309,7 +344,7 @@ plymouth_config() {
                 Enabling (and Theming) Plymouth Boot Splash
   -------------------------------------------------------------------------
   "
-    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/usr/share/plymouth/themes
+    PLYMOUTH_THEMES_DIR="$HOME"/archinstaller/configs/base/usr/share/plymouth/themes
     PLYMOUTH_THEME="arch-glow" # can grab from config later if we allow selection
     mkdir -p "/usr/share/plymouth/themes"
 
@@ -336,11 +371,11 @@ snapper_config() {
   -------------------------------------------------------------------------
   "
 
-    SNAPPER_CONF="$HOME"/archinstaller/configs/etc/snapper/configs/root
+    SNAPPER_CONF="$HOME"/archinstaller/configs/base/etc/snapper/configs/root
     mkdir -p /etc/snapper/configs/
     cp -rfv "${SNAPPER_CONF}" /etc/snapper/configs/
 
-    SNAPPER_CONF_D="$HOME"/archinstaller/configs/etc/conf.d/snapper
+    SNAPPER_CONF_D="$HOME"/archinstaller/configs/base/etc/conf.d/snapper
     mkdir -p /etc/conf.d/
     cp -rfv "${SNAPPER_CONF_D}" /etc/conf.d/
 }

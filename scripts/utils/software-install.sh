@@ -6,13 +6,15 @@
 # @stdout Output routed to install.log
 # @stderror Output routed to install.log
 
+# @description Pacstrap arch linux to install location
+# @noargs
 arch_install() {
     echo -ne "
 -------------------------------------------------------------------------
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-    pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed --color=always
+    pacstrap /mnt base base-devel linux linux-firmware linux-zen jq micro wget libnewt --noconfirm --needed --color=always
 }
 
 # @description Installs software from the AUR
@@ -24,19 +26,22 @@ aur_helper_install() {
 -------------------------------------------------------------------------
 "
     if [[ ! "$AUR_HELPER" == none ]]; then
+        # Install the aur helper selected
         git clone https://aur.archlinux.org/"$AUR_HELPER".git ~/"$AUR_HELPER"
         cd ~/"$AUR_HELPER" || return
         makepkg -si --noconfirm
-        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-        # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/pkg-files/aur-pkgs.txt | while read line; do
-            if [[ "${line}" == '--END OF MINIMAL INSTALL--' ]]; then
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                continue
-            fi
-            echo "INSTALLING: ${line}"
-            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
-        done
+
+        # JQ Filters
+        MINIMAL_AUR_FILTER=".minimal.aur[].package"
+        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
+
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${MINIMAL_AUR_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/base.json | (
+            while read -r line; do
+                echo "Installing $line"
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+            done
+        )
     fi
 }
 
@@ -48,15 +53,18 @@ base_install() {
                     Installing Base System  
 -------------------------------------------------------------------------
 "
-    # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-    # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/pkg-files/pacman-pkgs.txt | while read line; do
-            # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            pacman -S --noconfirm --needed --color=always "${line}"
-        done
+        # JQ Filters
+        MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
+
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" "$HOME"/archinstaller/packages/base.json | (
+            while read -r line; do
+                echo "Installing $line"
+                pacman -S "$line" --noconfirm --needed --color=always
+            done
+        )
     fi
 }
 
@@ -76,6 +84,34 @@ bootloader_install() {
 
 }
 
+# @description Installs btrfs packages
+# @noargs
+btrfs_install() {
+    echo -ne "
+-------------------------------------------------------------------------
+                    Installing Btrfs Packages
+-------------------------------------------------------------------------
+"
+    if [[ "$FS" == btrfs ]]; then
+        # JQ filters
+        PACMAN_FILTER=".pacman[].package"
+        AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .aur[].package" || echo "")
+
+        # Parse file with JQ to determine packages to install
+        jq --raw-output "${PACMAN_FILTER}""${AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
+            while read -r line; do
+                echo "Installing $line"
+
+                if [[ "$AUR_HELPER" != NONE ]]; then
+                    "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+                else
+                    pacman -S "$line" --noconfirm --needed --color=always
+                fi
+            done
+        )
+    fi
+}
+
 # @description Installs desktop environment packages from base repositories
 # @noargs
 desktop_environment_install() {
@@ -84,12 +120,24 @@ desktop_environment_install() {
                     Installing Desktop Environment Software  
 -------------------------------------------------------------------------
 "
-    sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/pkg-files/"${DESKTOP_ENV}".txt | while read line; do
-        # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-        [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-        echo "INSTALLING: ${line}"
-        sudo pacman -S --noconfirm --needed --color=always "${line}"
-    done
+    # JQ filters
+    MINIMAL_PACMAN_FILTER=".minimal.pacman[].package"
+    MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal.aur[].package" || echo "")
+    FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.pacman[].package" || echo "")
+    FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full.aur[].package" || echo "")
+
+    # Parse file with JQ to determine packages to install
+    jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/desktop-environments/"${DESKTOP_ENV}".json | (
+        while read -r line; do
+            echo "Installing $line"
+
+            if [[ "$AUR_HELPER" != NONE ]]; then
+                "$AUR_HELPER" -S "$line" --noconfirm --needed --color=always
+            else
+                pacman -S "$line" --noconfirm --needed --color=always
+            fi
+        done
+    )
 }
 
 # @description Enable essential services
@@ -103,42 +151,34 @@ essential_services() {
     # services part of the base installation
     echo "Enabling NetworkManager"
     systemctl enable NetworkManager.service
-    echo "NetworkManager enabled \n"
+    echo -e "NetworkManager enabled \n"
 
     echo "Enabling Periodic Trim"
     systemctl enable fstrim.timer
-    echo "Periodic Trim enabled \n"
+    echo -e "Periodic Trim enabled \n"
 
     if [[ ${INSTALL_TYPE} == "FULL" ]]; then
 
         # services part of full installation
         echo "Enabling Cups"
         systemctl enable cups.service
-        echo "  Cups enabled \n"
+        echo -e "  Cups enabled \n"
 
         echo "Syncing time with ntp"
         ntpd -qg
-        echo "Time synced \n"
+        echo -e "Time synced \n"
 
         echo "Enabling ntpd"
         systemctl enable ntpd.service
-        echo "NTP enabled \n"
-
-        echo "Disabling DHCP"
-        systemctl disable dhcpcd.service
-        echo "DHCP disabled \n"
-
-        echo "Stopping DHCP"
-        systemctl stop dhcpcd.service
-        echo "DHCP stopped \n"
+        echo -e "NTP enabled \n"
 
         echo "Enabling Bluetooth"
         systemctl enable bluetooth
-        echo "Bluetooth enabled \n"
+        echo -e "Bluetooth enabled \n"
 
         echo "Enabling Avahi"
         systemctl enable avahi-daemon.service
-        echo "Avahi enabled \n"
+        echo -e "Avahi enabled \n"
 
         if [[ "${FS}" == "luks" || "${FS}" == "btrfs" ]]; then
             snapper_config
@@ -160,12 +200,14 @@ graphics_install() {
     # Graphics Drivers find and install
     gpu_type=$(lspci)
     if grep -E "NVIDIA|GeForce" <<<"${gpu_type}"; then
-        pacman -S --noconfirm --needed --color=always nvidia
+        pacman -S --noconfirm --needed --color=always nvidia-dkms nvidia-settings
         nvidia-xconfig
     elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
         pacman -S --noconfirm --needed --color=always xf86-video-amdgpu
     elif grep -E "Integrated Graphics Controller|Intel Corporation UHD" <<<"${gpu_type}"; then
         pacman -S --noconfirm --needed --color=always libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
+    else
+        echo "No graphics drivers required"
     fi
 }
 
@@ -196,7 +238,7 @@ network_install() {
                     Network Setup 
 -------------------------------------------------------------------------
 "
-    pacman -S --noconfirm --needed --color=always networkmanager dhclient
+    pacman -S --noconfirm --needed --color=always networkmanager dhclient networkmanager-openvpn
     systemctl enable --now NetworkManager
 }
 
@@ -208,24 +250,23 @@ user_theming() {
                     Theming Desktop Environment  
 -------------------------------------------------------------------------
 "
-    # cd ~
-    # mkdir "$HOME/.cache"
-    # touch "$HOME/.cache/zshhistory"
-    # git clone "https://github.com/ChrisTitusTech/zsh"
-    # git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-    # ln -s "$HOME/zsh/.zshrc" ~/.zshrc
-
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
         if [[ "$DESKTOP_ENV" == "kde" ]]; then
-            cp -r ~/archinstaller/configs/.config/* ~/.config/
+            cp -r ~/archinstaller/configs/kde/home/. ~/
             pip install konsave
-            konsave -i ~/archinstaller/configs/kde.knsv
+            konsave -i ~/archinstaller/configs/kde/kde.knsv
             sleep 1
             konsave -a kde
         elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
             git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
             ./dotfiles-openbox/install-titus.sh
+        elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
+            cd ~/archinstaller/ && git submodule update --init
+            cp -r ~/archinstaller/configs/awesome/home/. ~/
+            sudo cp -r ~/archinstaller/configs/awesome/etc/xdg/awesome /etc/xdg/awesome
+            sudo mkdir -p /usr/share/wallpapers/
+            sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi

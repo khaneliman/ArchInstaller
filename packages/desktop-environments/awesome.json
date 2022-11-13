@@ -1,0 +1,167 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "lightdm"
+			},
+			{
+				"package": "lightdm-slick-greeter"
+			},
+			{
+				"package": "lxsession"
+			}
+		],
+		"aur": [
+			{
+				"package": "awesome-git"
+			}
+		]
+	},
+	"full": {
+		"pacman": [
+			{
+				"package": "ark"
+			},
+			{
+				"package": "blueman"
+			},
+			{
+				"package": "breeze"
+			},
+			{
+				"package": "breeze-gtk"
+			},
+			{
+				"package": "breeze-icons"
+			},
+			{
+				"package": "easyeffects"
+			},
+			{
+				"package": "dolphin"
+			},
+			{
+				"package": "dolphin-emu"
+			},
+			{
+				"package": "dolphin-plugins"
+			},
+			{
+				"package": "elisa"
+			},
+			{
+				"package": "feh"
+			},
+			{
+				"package": "gnome-keyring"
+			},
+			{
+				"package": "iw"
+			},
+			{
+				"package": "iwd"
+			},
+			{
+				"package": "kde-gtk-config"
+			},
+			{
+				"package": "kio-fuse"
+			},
+			{
+				"package": "kio-gdrive"
+			},
+			{
+				"package": "kvantum"
+			},
+			{
+				"package": "lxappearance"
+			},
+			{
+				"package": "lua-fifo"
+			},
+			{
+				"package": "network-manager-applet"
+			},
+			{
+				"package": "pavucontrol"
+			},
+			{
+				"package": "playerctl"
+			},
+			{
+				"package": "polkit-kde-agent"
+			},
+			{
+				"package": "qt5ct"
+			},
+			{
+				"package": "qt6ct"
+			},
+			{
+				"package": "rofi"
+			},
+			{
+				"package": "rofi-calc"
+			},
+			{
+				"package": "rofi-emoji"
+			},
+			{
+				"package": "scrot"
+			},
+			{
+				"package": "tumbler"
+			},
+			{
+				"package": "viewnior"
+			},
+			{
+				"package": "wireless_tools"
+			},
+			{
+				"package": "xcolor"
+			},
+			{
+				"package": "xdg-desktop-portal-kde"
+			},
+			{
+				"package": "xdg-user-dirs"
+			},
+			{
+				"package": "xdg-user-dirs-gtk"
+			},
+			{
+				"package": "xfce4-power-manager"
+			},
+			{
+				"package": "xorg-xrdb"
+			},
+			{
+				"package": "xsettingsd"
+			}
+		],
+		"aur": [
+			{
+				"package": "awmtt"
+			},
+			{
+				"package": "lightdm-settings"
+			},
+			{
+				"package": "lua-pam-git"
+			},
+			{
+				"package": "networkmanager-dmenu-git"
+			},
+			{
+				"package": "picom-git"
+			},
+			{
+				"package": "rofi-power-menu"
+			},
+			{
+				"package": "xidlehook"
+			}
+		]
+	}
+}

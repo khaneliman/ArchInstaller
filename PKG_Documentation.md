@@ -68,8 +68,6 @@ FULL installations also include the following packages:
 
 * **[bind](https://archlinux.org/packages/extra/x86_64/bind/)**: A complete, highly portable implementation of the DNS protocol.
 
-* **[bison](https://archlinux.org/packages/core/x86_64/bison/)**: The GNU general-purpose parser generator.
-
 * **[bluez](https://archlinux.org/packages/extra/x86_64/bluez/)**: Daemons for the bluetooth protocol stack.
 
 * **[bluez-libs](https://archlinux.org/packages/extra/x86_64/bluez-libs/)**: Deprecated libraries for the bluetooth protocol stack.
@@ -80,23 +78,11 @@ FULL installations also include the following packages:
 
 * **[btrfs-progs](https://archlinux.org/packages/core/x86_64/btrfs-progs/)**: [Btrfs](https://en.wikipedia.org/wiki/Btrfs) filesystem utilities.
 
-* **[celluloid](https://archlinux.org/packages/community/x86_64/celluloid/)**: Simple GTK+ frontend for mpv.
-
-* **[cmatrix](https://archlinux.org/packages/community/x86_64/cmatrix/)**: A command-line utility to display a Matrix-like text-raining effect (type `cmatrix` in the terminal)
-
-* **[code](https://archlinux.org/packages/community/x86_64/code/)**: The open-source build of Visual Studio Code (vscode).
-
-* **[cronie](https://archlinux.org/packages/core/x86_64/cronie/)**: Daemon that runs specified programs at scheduled times (and related tools).
-
 * **[cups](https://archlinux.org/packages/extra/x86_64/cups/)**: Daemon install of a standards-based and open source printing system. CUPS uses IPP Everywhere to support printing to local and network printers.
-
-* **[dialog](https://archlinux.org/packages/core/x86_64/dialog/)**: A tool to display dialog boxes from shell scripts.
 
 * **[dmidecode](https://archlinux.org/packages/extra/x86_64/dmidecode/)**: Open-source tool which reports information about your system's hardware as described in your system BIOS according to the SMBIOS/DMI standard.
 
 * **[dnsmasq](https://archlinux.org/packages/extra/x86_64/dnsmasq/)**: Lightweight, easy to configure DNS forwarder and DHCP server.
-
-* **[dtc](https://archlinux.org/packages/community/x86_64/dtc/)**: Device Tree Compiler, useful to reformat device-trees files (e.g. dts -> dtb) for booting kernels on embedded systems.
 
 * **[efibootmgr](https://archlinux.org/packages/core/x86_64/efibootmgr/)**: Linux user-space application to modify the EFI Boot Manager.
 
@@ -116,13 +102,9 @@ FULL installations also include the following packages:
 
 * **[gcc](https://archlinux.org/packages/core/x86_64/gcc/)**: The GNU Compiler Collection for C and C++ front-ends.
 
-* **[gimp](https://archlinux.org/packages/extra/x86_64/gimp/)**: A powerful, free, and open-source image editor.
-
 * **[gparted](https://archlinux.org/packages/extra/x86_64/gparted/)**: A disk partitioning utility, frontend to GNU's Parted.
 
 * **[gptfdisk](https://archlinux.org/packages/extra/x86_64/gptfdisk/)**: A text-mode partitioning tool that works on GUID Partition Table (GPT) disks.
-
-* **[grub-customizer](https://archlinux.org/packages/community/x86_64/grub-customizer/)**: A graphical grub2 settings manager.
 
 * **[gst-libav](https://archlinux.org/packages/extra/x86_64/gst-libav/)**: Multimedia graph framework - libav plugin.
 
@@ -130,15 +112,9 @@ FULL installations also include the following packages:
 
 * **[gst-plugins-ugly](https://archlinux.org/packages/extra/x86_64/gst-plugins-ugly/)**: Multimedia graph framework - ugly plugins.
 
-* **[haveged](https://archlinux.org/packages/extra/x86_64/haveged/)**: Entropy harvesting daemon using CPU timings.
-
-* **[htop](https://archlinux.org/packages/extra/x86_64/htop/)**: Interactive process viewer.
-
 * **[jdk-openjdk](https://archlinux.org/packages/extra/x86_64/jdk-openjdk/)**: OpenJDK Java 18 development kit.
 
 * **[kitty](https://archlinux.org/packages/community/x86_64/kitty/)**: A modern, hackable and featureful OpenGL-based terminal emulator.
-
-* **[libdvdcss](https://archlinux.org/packages/extra/x86_64/libdvdcss/)**: Portable abstraction library for DVD decryption.
 
 * **[libtool](https://archlinux.org/packages/core/x86_64/libtool/)**: A generic library support script.
 
@@ -152,13 +128,9 @@ FULL installations also include the following packages:
 
 * **[make](https://archlinux.org/packages/core/x86_64/make/)**: GNU Make is a tool which controls the generation of executables and other non-source files of a program from the program's source files (specifically from the *makefile*).
 
-* **[neofetch](https://archlinux.org/packages/community/any/neofetch/)**: A CLI system information tool written in BASH that supports displaying images.
-
 * **[ntfs-3g](https://archlinux.org/packages/extra/x86_64/ntfs-3g/)**: Driver and utilities for the NTFS file system.
 
 * **[ntp](https://archlinux.org/packages/extra/x86_64/ntp/)**: Network Time Protocol reference implementation.
-
-* **[openbsd-netcat](https://archlinux.org/packages/community/x86_64/openbsd-netcat/)**: TCP/IP swiss army knife. OpenBSD variant.
 
 * **[openssh](https://archlinux.org/packages/core/x86_64/openssh/)**: Premier connectivity tool for remote login with the SSH protocol.
 
@@ -175,14 +147,6 @@ FULL installations also include the following packages:
 * **[pkgconf](https://archlinux.org/packages/core/x86_64/pkgconf/)**: Package compiler and linker metadata toolkit.
 
 * **[powerline-fonts](https://archlinux.org/packages/community/x86_64/powerline-fonts/)**: Patched fonts for powerline.
-
-* **[pulseaudio](https://archlinux.org/packages/extra/x86_64/pulseaudio/)**: A featureful, general-purpose sound server.
-
-* **[pulseaudio-alsa](https://archlinux.org/packages/extra/x86_64/pulseaudio-alsa/)**: ALSA (Advanced Linux Sound Architecture) configuration for PulseAudio.
-
-* **[pulseaudio-bluetooth](https://archlinux.org/packages/extra/x86_64/pulseaudio-bluetooth/)**: Bluetooth support for PulseAudio.
-
-* **[python-notify2](https://archlinux.org/packages/extra/x86_64/python-notify2/)**: Python interface to DBus notifications.
 
 * **[python-pip](https://archlinux.org/packages/extra/x86_64/python-pip/)**: The PyPA recommended tool for installing Python packages.
 
@@ -244,10 +208,6 @@ FULL installations also include the following packages:
 
 Only for FULL installations (MINIMAL installs do not install AUR packages).
 
-* **[autojump](https://aur.archlinux.org/packages/autojump)**: A faster way to navigate your filesystem from the command line.
-
-* **[brave-bin](https://aur.archlinux.org/packages/brave-bin)**: A privacy-focused Chromium web browser. I recommend a Gecko-based browser instead (e.g. [Firefox]((https://archlinux.org/packages/extra/x86_64/firefox/))) as Google's monolopoly benefits nobody, but certain plugins are only available for Chromium-based web browsers.
-
 * **[dxvk-bin](https://aur.archlinux.org/packages/dxvk-bin)**: Vulkan-based compatibility layer for Direct3D 9/10/11 which allows running 3D applications on Linux using Wine (Windows DLL binary files).
 
 * **[github-desktop-bin](https://aur.archlinux.org/packages/github-desktop-bin)**: GUI for managing Git and GitHub.
@@ -270,8 +230,6 @@ Only for FULL installations (MINIMAL installs do not install AUR packages).
 
 * **[nordic-theme](https://aur.archlinux.org/packages/nordic-theme)**: Nord-derived themes for GTK and other platforms.
 
-* **[ocs-url](https://aur.archlinux.org/packages/ocs-url)**: An install helper program for items served via OpenCollaborationServices (ocs://).
-
 * **[plymouth-git](https://aur.archlinux.org/packages/plymouth-git)**: A graphical boot splash screen with kernel mode-setting support (development version).
 
 * **[sddm-nordic-theme-git](https://aur.archlinux.org/packages/sddm-nordic-theme-git)**: Nordic theme for SDDM (Simple Desktop Display Manager).
@@ -279,8 +237,6 @@ Only for FULL installations (MINIMAL installs do not install AUR packages).
 * **[snapper-gui-git](https://aur.archlinux.org/packages/snapper-gui-git)**: GUI for [snapper](https://archlinux.org/packages/community/x86_64/snapper/), a tool of managing snapshots of [Btrfs](https://en.wikipedia.org/wiki/Btrfs) subvolumes and LVM volumes.
 
 * **[ttf-meslo](https://aur.archlinux.org/packages/ttf-meslo)**: Meslo LG is a customized version of Apple's Menlo font with various line gap and dotted zero.
-
-* **[zoom](https://aur.archlinux.org/packages/zoom)**: A video/web conferencing service.
 
 ### Budgie Desktop Environment
 
@@ -514,13 +470,7 @@ The following packages are only installed if the user selects [Awesome](https://
 
 * **[lightdm](https://archlinux.org/packages/extra/x86_64/lightdm/)**: A lightweight display manager.
 
-* **[lightdm-gtk-greeter](https://archlinux.org/packages/extra/x86_64/lightdm-gtk-greeter/)**: GTK+ greeter for LightDM.
-
 * **[lxsession](https://archlinux.org/packages/community/x86_64/lxsession/)**: A lightweight X11 session manager
-
-* **[rxvt-unicode](https://archlinux.org/packages/community/x86_64/rxvt-unicode/)**: Unicode-enabled Rxvt-clone terminal emulator.
-
-* **[thunar](https://archlinux.org/packages/extra/x86_64/thunar/)**: Modern file manager for XFCE which works rather well with Awesome.
 
 FULL installations also include the following software:
 
@@ -542,10 +492,6 @@ FULL installations also include the following software:
 
 * **[jq](https://archlinux.org/packages/community/x86_64/jq/)**: Command-line JSON processor.
 
-* **[lightdm-webkit-theme-litarvan](https://archlinux.org/packages/community/any/lightdm-webkit-theme-litarvan/)**: Modern and full-featured LightDM theme.
-
-* **[lightdm-webkit2-greeter](https://archlinux.org/packages/community/x86_64/lightdm-webkit2-greeter/)**: LightDM greeter that uses WebKit2 for theming via HTML/JavaScript.
-
 * **[lxappearance](https://archlinux.org/packages/community/x86_64/lxappearance/)**: Feature-rich GTK+ theme switcher of the LXDE Desktop.
 
 * **[nano](https://archlinux.org/packages/core/x86_64/nano/)**: Pico editor clone with enhancements.
@@ -560,21 +506,11 @@ FULL installations also include the following software:
 
 * **[playerctl](https://archlinux.org/packages/community/x86_64/playerctl/)**: A command-line utility and library for controlling media players that implement the MPRIS D-Bus Interface Specification which simplifies binding player actions to media keys.
 
-* **[pulseaudio](https://archlinux.org/packages/extra/x86_64/pulseaudio/)**: A featureful, general-purpose sound server.
-
-* **[pulseaudio-alsa](https://archlinux.org/packages/extra/x86_64/pulseaudio-alsa/)**: ALSA (Advanced Linux Sound Architecture) configuration for PulseAudio.
-
 * **[qt5ct](https://archlinux.org/packages/community/x86_64/qt5ct/)**: Qt5 Configuration Utility.
 
 * **[rofi](https://archlinux.org/packages/community/x86_64/rofi/)**: A window switcher, application launcher and dmenu replacement.
 
 * **[scrot](https://archlinux.org/packages/community/x86_64/scrot/)**: Simple command-line screenshot utility for X.
-
-* **[thunar-archive-plugin](https://archlinux.org/packages/extra/x86_64/thunar-archive-plugin/)**: Allows to create and extract archives in the Thunar file manager.
-
-* **[thunar-media-tags-plugin](https://archlinux.org/packages/extra/x86_64/thunar-media-tags-plugin/)**: Adds special features for media files to the Thunar file manager.
-
-* **[thunar-volman](https://archlinux.org/packages/extra/x86_64/thunar-volman/)**: Automatic management of removeable devices in the Thunar file manager.
 
 * **[tint2](https://archlinux.org/packages/community/x86_64/tint2/)**: Basic, good-looking task manager for WMs.
 

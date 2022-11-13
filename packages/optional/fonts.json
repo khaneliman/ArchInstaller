@@ -1,0 +1,17 @@
+{
+	"pacman": [
+		{ "package": "awesome-terminal-fonts" },
+		{ "package": "font-manager" },
+		{ "package": "powerline-fonts" },
+		{ "package": "terminus-font" },
+		{ "package": "ttc-iosevka" },
+		{ "package": "ttf-droid" },
+		{ "package": "ttf-fantasque-sans-mono" },
+		{ "package": "ttf-fira-code" },
+		{ "package": "ttf-hack" },
+		{ "package": "ttf-iosevka-nerd" },
+		{ "package": "ttf-liberation" },
+		{ "package": "ttf-roboto" }
+	],
+	"aur": [{ "package": "nerd-fonts-fantasque-sans-mono" }, { "package": "nerd-fonts-fira-code" }, { "package": "noto-fonts-emoji" }]
+}

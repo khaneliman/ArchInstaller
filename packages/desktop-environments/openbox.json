@@ -1,0 +1,160 @@
+{
+	"minimal": {
+		"pacman": [
+			{
+				"package": "openbox"
+			},
+			{
+				"package": "lightdm"
+			},
+			{
+				"package": "lightdm-gtk-greeter"
+			},
+			{
+				"package": "lxsession"
+			},
+			{
+				"package": "thunar"
+			}
+		],
+		"aur": []
+	},
+	"full": {
+		"pacman": [
+			{
+				"package": "blueman"
+			},
+			{
+				"package": "breeze"
+			},
+			{
+				"package": "breeze-gtk"
+			},
+			{
+				"package": "breeze-icons"
+			},
+			{
+				"package": "easyeffects"
+			},
+			{
+				"package": "feh"
+			},
+			{
+				"package": "iw"
+			},
+			{
+				"package": "iwd"
+			},
+			{
+				"package": "lxappearance"
+			},
+			{
+				"package": "network-manager-applet"
+			},
+			{
+				"package": "pavucontrol"
+			},
+			{
+				"package": "playerctl"
+			},
+			{
+				"package": "qt5ct"
+			},
+			{
+				"package": "qt6ct"
+			},
+			{
+				"package": "rofi"
+			},
+			{
+				"package": "rofi-calc"
+			},
+			{
+				"package": "rofi-emoji"
+			},
+			{
+				"package": "scrot"
+			},
+			{
+				"package": "tumbler"
+			},
+			{
+				"package": "viewnior"
+			},
+			{
+				"package": "wireless_tools"
+			},
+			{
+				"package": "xcolor"
+			},
+			{
+				"package": "xdg-desktop-portal-kde"
+			},
+			{
+				"package": "xdg-user-dirs"
+			},
+			{
+				"package": "xdg-user-dirs-gtk"
+			},
+			{
+				"package": "xfce4-power-manager"
+			},
+			{
+				"package": "xorg-xrdb"
+			},
+			{
+				"package": "xsettingsd"
+			},
+			{
+				"package": "dunst"
+			},
+			{
+				"package": "gsimplecal"
+			},
+			{
+				"package": "gtk2-perl"
+			},
+			{
+				"package": "imagemagick"
+			},
+			{
+				"package": "lightdm-webkit-theme-litarvan"
+			},
+			{
+				"package": "lightdm-webkit2-greeter"
+			},
+			{
+				"package": "obconf"
+			},
+			{
+				"package": "parcellite"
+			},
+			{
+				"package": "thunar-archive-plugin"
+			},
+			{
+				"package": "thunar-media-tags-plugin"
+			},
+			{
+				"package": "thunar-volman"
+			},
+			{
+				"package": "tint2"
+			},
+			{
+				"package": "w3m"
+			}
+		],
+		"aur": [
+			{
+				"package": "lightdm-settings"
+			},
+			{
+				"package": "picom-git"
+			},
+			{
+				"package": "xidlehook"
+			}
+		]
+	}
+}

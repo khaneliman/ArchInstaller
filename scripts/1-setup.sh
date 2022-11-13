@@ -12,7 +12,7 @@ for filename in /root/archinstaller/scripts/utils/*.sh; do
     # shellcheck source=./utils/*.sh
     source "$filename"
 done
-source $HOME/archinstaller/configs/setup.conf
+source "$HOME"/archinstaller/configs/setup.conf
 
 logo
 
@@ -33,9 +33,7 @@ sed -Ei 's/^# (%wheel ALL=\(ALL(:ALL)?\) NOPASSWD: ALL)/\1/' /etc/sudoers
 #Add parallel downloading
 sed -i '/^#ParallelDownloads/s/^#//' /etc/pacman.conf
 
-#Enable multilib
-sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
-pacman -Sy --noconfirm --needed --color=always
+extra_repos
 
 base_install
 

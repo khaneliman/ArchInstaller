@@ -12,7 +12,7 @@ for filename in "$HOME"/archinstaller/scripts/utils/*.sh; do
   # shellcheck source=./utils/*.sh
   source "$filename"
 done
-source $HOME/archinstaller/configs/setup.conf
+source "$HOME"/archinstaller/configs/setup.conf
 
 logo
 
