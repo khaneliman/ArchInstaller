@@ -24,22 +24,23 @@ aur_helper_install() {
 -------------------------------------------------------------------------
 "
     if [[ ! "$AUR_HELPER" == none ]]; then
+
+        # Install the aur helper selected
         git clone https://aur.archlinux.org/"$AUR_HELPER".git ~/"$AUR_HELPER"
         cd ~/"$AUR_HELPER" || return
         makepkg -si --noconfirm
-        # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
-        # stop the script and move on, not installing any more packages below that line
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/aur.txt | while read line; do
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
-        done
 
-        sed -n '/'"$INSTALL_TYPE"'/q;p' ~/archinstaller/packages/desktop-environments/aur/"$DESKTOP_ENV".txt | while read line; do
-            [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-            echo "INSTALLING: ${line}"
-            "$AUR_HELPER" -S --noconfirm --needed --color=always "${line}"
-        done
+        # MINIMAL_AUR_FILTER=.minimal[].aur[].package
+        MINIMAL_AUR_FILTER=.minimal[].aur[].package
+        # FULL_AUR_FILTER=.full[].aur[].package
+        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
+
+        jq --raw-output "${MINIMAL_AUR_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/base.json | (
+            while read line; do
+                echo "Installing $line"
+                "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+            done
+        )
     fi
 }
 
@@ -54,17 +55,17 @@ base_install() {
     # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
     # stop the script and move on, not installing any more packages below that line
     if [[ ! "$INSTALL_TYPE" == SERVER ]]; then
+        # Install pacman packages with pacman - MINIMNAL
+        MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
+        # FULL_PACMAN_FILTER=.full[].pacman[].package
+        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
         INSTALL_STRING="pacman -S --noconfirm --needed --color=always "
 
-        sed -n '/'"$INSTALL_TYPE"'/q;p' "$HOME"/archinstaller/packages/pacman.txt | (
+        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${FULL_PACMAN_FILTER}" ~/archinstaller/packages/base.json | (
             while read line; do
-                # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
-                [[ "${line}" == '--END OF MINIMAL INSTALL--' ]] && continue
-                pacman -S --noconfirm --needed --color=always "$line"
+                echo "Installing $line"z
+                pacman -S $line --noconfirm --needed --color=always
             done
-
-            echo "Installing base packages"
-            eval "$INSTALL_STRING"
         )
     fi
 }
@@ -94,24 +95,26 @@ btrfs_install() {
 -------------------------------------------------------------------------
 "
     if [[ "$FS" == btrfs ]]; then
+        # Install pacman packages with pacman - MINIMNAL
+        MINIMAL_PACMAN_FILTER=.minimal[].pacman[].package
+        # MINIMAL_AUR_FILTER=.minimal[].aur[].package
+        MINIMAL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && echo ", .minimal[].aur[].package" || echo "")
+        # FULL_PACMAN_FILTER=.full[].pacman[].package
+        FULL_PACMAN_FILTER=$([ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].pacman[].package" || echo "")
+        # FULL_AUR_FILTER=.full[].aur[].package
+        FULL_AUR_FILTER=$([ "$AUR_HELPER" != NONE ] && [ "$INSTALL_TYPE" == "FULL" ] && echo ", .full[].aur[].package" || echo "")
 
-        # Install pacman packages with pacman
-        jq --raw-output '.pacman[].package' "$HOME"/archinstaller/packages/btrfs.json | (
+        jq --raw-output "${MINIMAL_PACMAN_FILTER}""${MINIMAL_AUR_FILTER}""${FULL_PACMAN_FILTER}""${FULL_AUR_FILTER}" ~/archinstaller/packages/btrfs.json | (
             while read line; do
-                echo "Installing $line"
-                pacman -S --noconfirm --needed --color=always
+                echo "Installing $line"z
+
+                if [[ "$AUR_HELPER" != NONE ]]; then
+                    "$AUR_HELPER" -S $line --noconfirm --needed --color=always
+                else
+                    pacman -S $line --noconfirm --needed --color=always
+                fi
             done
         )
-
-        # If aur helper installed, install the aur packages
-        if [[ "$AUR_HELPER" != NONE ]]; then
-            jq --raw-output '.aur[].package' "$HOME"/archinstaller/packages/btrfs.json | (
-                while read line; do
-                    echo "Installing $line"
-                    "$AUR_HELPER" -S --noconfirm --needed --color=always
-                done
-            )
-        fi
     fi
 }
 
