@@ -252,21 +252,17 @@ user_theming() {
 "
     # Theming DE if user chose FULL installation
     if [[ "$INSTALL_TYPE" == "FULL" ]]; then
-        if [[ "$DESKTOP_ENV" == "kde" ]]; then
-            cp -r ~/archinstaller/configs/kde/home/. ~/
-            pip install konsave
-            konsave -i ~/archinstaller/configs/kde/kde.knsv
-            sleep 1
-            konsave -a kde
-        elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
-            git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
-            ./dotfiles-openbox/install-titus.sh
-        elif [[ "$DESKTOP_ENV" == "awesome" ]]; then
+
+        # Install wallpapers
+        echo -e "Installing wallpapers \n"
+        sudo mkdir -p /usr/share/wallpapers/
+        sudo cp -r ~/archinstaller/configs/base/usr/share/wallpapers/* /usr/share/wallpapers/
+
+        if [[ "$DESKTOP_ENV" == "awesome" ]]; then
+            # Several awesomewm modules are nested git repos, using submodules requires fetching from those repos before copying config over
             cd ~/archinstaller/ && git submodule update --init
             cp -r ~/archinstaller/configs/awesome/home/. ~/
             sudo cp -r ~/archinstaller/configs/awesome/etc/xdg/awesome /etc/xdg/awesome
-            sudo mkdir -p /usr/share/wallpapers/
-            sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
         elif [[ "$DESKTOP_ENV" == "gnome" ]]; then
 
             echo -e "Configuring gnome shell"
@@ -286,7 +282,16 @@ user_theming() {
                 echo -e "Configuring gnome shell extensions"
                 dconf load /org/gnome/shell/extensions/ <~/archinstaller/configs/gnome/extension-settings.dconf
             fi
-
+        elif [[ "$DESKTOP_ENV" == "kde" ]]; then
+            # TODO: update KDE theme/config
+            cp -r ~/archinstaller/configs/kde/home/. ~/
+            pip install konsave
+            konsave -i ~/archinstaller/configs/kde/kde.knsv
+            sleep 1
+            konsave -a kde
+        elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
+            git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
+            ./dotfiles-openbox/install-titus.sh
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi
