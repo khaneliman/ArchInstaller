@@ -3,9 +3,6 @@
 		"pacman": [
 			{
 				"package": "gnome"
-			},
-			{
-				"package": "deepin-extra"
 			}
 		],
 		"aur": []
@@ -13,39 +10,87 @@
 	"full": {
 		"pacman": [
 			{
-				"package": "gparted"
-			},
-			{
 				"package": "gnome-extra"
 			},
 			{
-				"package": "gvfs"
+				"package": "gnome-firmware"
 			},
 			{
-				"package": "gvfs-afc"
+				"package": "gnome-weather"
 			},
 			{
-				"package": "gvfs-goa"
+				"package": "gnome-themes-extra"
 			},
 			{
-				"package": "gvfs-google"
-			},
-			{
-				"package": "gvfs-gphoto2"
-			},
-			{
-				"package": "gvfs-mtp"
-			},
-			{
-				"package": "gvfs-nfs"
-			},
-			{
-				"package": "gvfs-smb"
+				"package": "gparted"
 			},
 			{
 				"package": "papirus-icon-theme"
 			}
 		],
-		"aur": []
-	}
+		"aur": [
+			{
+				"package": "gnome-shell-extension-pop-shell"
+			},
+			{
+				"package": "gnome-shell-extension-arc-menu"
+			},
+			{
+				"package": "gnome-shell-extension-blur-my-shell"
+			},
+			{
+				"package": "gnome-shell-extension-dash-to-panel"
+			},
+			{
+				"package": "gnome-shell-extension-appindicator43"
+			},
+			{
+				"package": "gnome-shell-extension-ddterm"
+			},
+			{
+				"package": "gnome-shell-extension-extensions-list-git"
+			},
+			{
+				"package": "gnome-shell-extension-openweather"
+			},
+			{
+				"package": "gnome-shell-extension-clipboard-history"
+			},
+			{
+				"package": "gnome-shell-extension-fly-pie"
+			}
+		]
+	},
+	"extensions": [
+		{
+			"extension": "pop-shell@system76.com"
+		},
+		{
+			"extension": "arcmenu@arcmenu.com"
+		},
+		{
+			"extension": "blur-my-shell@aunetx"
+		},
+		{
+			"extension": "dash-to-panel@jderose9.github.com"
+		},
+		{
+			"extension": "appindicatorsupport@rgcjonas.gmail.com"
+		},
+		{
+			"extension": "ddterm@amezin.github.com"
+		},
+		{
+			"extension": "extension-list@tu.berry"
+		},
+		{
+			"extension": "openweather-extension@jenslody.de"
+		},
+		{
+			"extension": "clipboard-indicator@tudmotu.com"
+		},
+		{
+			"extension": "flypie@schneegans.github.com"
+		}
+	]
 }

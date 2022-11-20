@@ -267,6 +267,26 @@ user_theming() {
             sudo cp -r ~/archinstaller/configs/awesome/etc/xdg/awesome /etc/xdg/awesome
             sudo mkdir -p /usr/share/wallpapers/
             sudo cp ~/archinstaller/configs/base/usr/share/wallpapers/butterfly.png /usr/share/wallpapers/butterfly.png
+        elif [[ "$DESKTOP_ENV" == "gnome" ]]; then
+
+            echo -e "Configuring gnome shell"
+            dconf load /org/gnome/shell/ <~/archinstaller/configs/gnome/base.dconf
+
+            # Gnome shell extensions required aur helper to install, only enable and load config when aur helper installed
+            if [[ "$AUR_HELPER" != NONE ]]; then
+                echo -e "Enabling gnome shell extensions \n"
+                # Parse file with JQ to determine extensions to enable
+                jq --raw-output ".extensions[].extension" ~/archinstaller/packages/desktop-environments/gnome.json | (
+                    while read -r line; do
+                        echo "Enabling $line"
+                        gnome-extensions enable "$line"
+                    done
+                )
+
+                echo -e "Configuring gnome shell extensions"
+                dconf load /org/gnome/shell/extensions/ <~/archinstaller/configs/gnome/extension-settings.dconf
+            fi
+
         else
             echo -e "No theming setup for $DESKTOP_ENV"
         fi
