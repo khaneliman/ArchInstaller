@@ -1,0 +1,11 @@
+{
+	"pacman": [
+		{ "package": "cmake", "label": "Cmake build system" },
+		{ "package": "extra-cmake-modules", "label": "Extra Cmake modules" },
+		{ "package": "git", "label": "Git" },
+		{ "package": "jdk-openjdk", "label": "Open JDK" },
+		{ "package": "meson", "label": "Meson build system" },
+		{ "package": "ninja", "label": "Ninja build system" }
+	],
+	"aur": [{ "package": "github-desktop-bin" }, { "package": "visual-studio-code-bin" }]
+}

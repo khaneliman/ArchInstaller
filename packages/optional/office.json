@@ -1,0 +1,4 @@
+{
+	"pacman": [{ "package": "thunderbird" }],
+	"aur": [{ "package": "davmail" }]
+}

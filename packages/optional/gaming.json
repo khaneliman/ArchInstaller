@@ -1,0 +1,10 @@
+{
+	"pacman": [
+		{ "package": "gamemode" },
+		{ "package": "gamescope" },
+		{ "package": "lutris" },
+		{ "package": "steam" },
+		{ "package": "steam-native-runtime" }
+	],
+	"aur": [{ "package": "heroic-games-launcher-bin" }, { "package": "mangohud" }, { "package": "mangohud-common" }]
+}
