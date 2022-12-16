@@ -27,6 +27,7 @@ add_user() {
         chown -R "$USERNAME": /home/"$USERNAME"/archinstaller
         echo "archinstaller copied to home directory"
 
+        # TODO: move somewhere else
         # enter $NAME_OF_MACHINE to /etc/hostname
         echo "$NAME_OF_MACHINE" >/etc/hostname
     else
