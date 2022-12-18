@@ -285,6 +285,8 @@ user_theming() {
 		elif [[ "$DESKTOP_ENV" == "openbox" ]]; then
 			git clone https://github.com/stojshic/dotfiles-openbox ~/dotfiles-openbox
 			./dotfiles-openbox/install-titus.sh
+		elif [[ "$DESKTOP_ENV" == "hyprland" ]]; then
+			source ~/archinstaller/scripts/desktop-environment/hyprland.sh
 		else
 			echo -e "No theming setup for $DESKTOP_ENV"
 		fi

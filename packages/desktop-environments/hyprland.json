@@ -1,0 +1,100 @@
+{
+  "minimal": {
+    "pacman": [],
+    "aur": [
+      {
+        "package": "hyprland-git"
+      },
+      {
+        "package": "wlroots-git"
+      },
+      {
+        "package": "sddm-git"
+      }
+    ]
+  },
+  "full": {
+    "pacman": [
+      {
+        "package": "swayidle"
+      },
+      {
+        "package": "wf-recorder"
+      },
+      {
+        "package": "egl-wayland"
+      },
+      {
+        "package": "swayimg"
+      },
+      {
+        "package": "wayvnc"
+      },
+      {
+        "package": "grim"
+      },
+      {
+        "package": "slurp"
+      },
+      {
+        "package": "ranger"
+      },
+      {
+        "package": "playerctl"
+      },
+      {
+        "package": "swappy"
+      },
+      {
+        "package": "mako"
+      },
+      {
+        "package": "pavucontrol"
+      },
+      {
+        "package": "polkit-kde-agent"
+      }
+    ],
+    "aur": [
+      {
+        "package": "waybar-hyprland-git"
+      },
+      {
+        "package": "swaylock-effects"
+      },
+      {
+        "package": "catppuccin-gtk-theme-macchiato"
+      },
+      {
+        "package": "rofi-lbonn-wayland-git"
+      },
+      {
+        "package": "wlogout"
+      },
+      {
+        "package": "nwg-look"
+      },
+      {
+        "package": "hyprpaper-git"
+      },
+      {
+        "package": "hyprpicker-git"
+      },
+      {
+        "package": "xdg-desktop-portal-hyprland-git"
+      },
+      {
+        "package": "wdisplays"
+      },
+      {
+        "package": "plymouth"
+      },
+      {
+        "package": "pw-volume-git"
+      },
+      {
+        "package": "clipman-git"
+      }
+    ]
+  }
+}
